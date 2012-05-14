@@ -17,12 +17,12 @@ import ibevac.environment.FireSpace;
  * @author vaisagh
  */
 public class CommunicationDistExperiment {
-    public static final int NUMBER_OF_REPLICATIONS = 90;
+    public static final int NUMBER_OF_REPLICATIONS = 100;
     public static final int NUMBER_OF_AGENTS = 200;
 //    public static final int NUMBER_OF_MANAGEMENT = 20;
     public static final int REPORT_TIME= 500;
-    public static final int STARTING_SEED = 20;
-    public static final int EXPERIMENT_ID = 2;
+    public static final int STARTING_SEED = 1;
+    public static final int EXPERIMENT_ID = 3;
     
     public static void main(String[] args){
         if(args.length ==1){
