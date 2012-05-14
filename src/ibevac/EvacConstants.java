@@ -97,6 +97,7 @@ public final class EvacConstants {
      */
     public static final double MAX_SENSOR_RANGE = SENSOR_RANGE * AGENT_MAX_DIAMETER;
     public static boolean DUMP_AGENT_DETAILS = false;
+    public static boolean WRITE_DATA = false;
 
 
     private EvacConstants() {

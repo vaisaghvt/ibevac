@@ -14,6 +14,7 @@ import javax.xml.bind.JAXBException;
 
 import sim.engine.SimState;
 import abmcs.motionplanning.level0.jbox2d.JBox2DPhysicalEnvironment;
+import ibevac.EvacConstants;
 import ibevac.datatracker.DataTracker;
 import ibevac.datatracker.DatabaseHandler;
 import ibevac.datatracker.PEDDataTracker;
@@ -132,7 +133,9 @@ public class IbevacModel extends SimState {
         System.out.println("wrapping up");
         PEDDataTracker.instance().storeOverallStats();
         PEDDataTracker.instance().reportOverallStats();
-        PEDDataTracker.instance().storeToDatabase();
+        if (EvacConstants.WRITE_DATA) {
+            PEDDataTracker.instance().storeToDatabase();
+        }
 
     }
 
