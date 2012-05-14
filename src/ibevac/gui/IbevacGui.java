@@ -224,7 +224,7 @@ public class IbevacGui extends GUIState {
             displayFrames.get(floorNumber).setTitle("Floor #" + floorNumber);
             displayFrames.get(floorNumber).setVisible(true);
             displayFrames.get(floorNumber).setResizable(true);
-            displays.get(floorNumber).attach(backgroundPortrayals.get(floorNumber), "Overlay");
+//            displays.get(floorNumber).attach(backgroundPortrayals.get(floorNumber), "Overlay");
             displays.get(floorNumber).attach(firePortrayals.get(floorNumber),
                     "Fire");
             displays.get(floorNumber).attach(smokePortrayals.get(floorNumber),
