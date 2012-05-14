@@ -295,8 +295,9 @@ public class IbevacModel extends SimState {
         }
     }
 
-    public static void runLoop(long seed, int reportTime, int NUMBER_OF_REPLICATIONS, int NUMBER_OF_AGENTS, int experimentId, String experimentComment) {
+    public static void runLoop(long seed, int reportTime, int NUMBER_OF_REPLICATIONS, int NUMBER_OF_AGENTS,int NUMBER_OF_MANAGEMENT, int experimentId, String experimentComment) {
         numberOfAgents = NUMBER_OF_AGENTS;
+        numberOfManagers = NUMBER_OF_MANAGEMENT;
         PEDDataTracker.experimentId = experimentId;
         PEDDataTracker.comment = experimentComment;
         runLoop(seed, reportTime, NUMBER_OF_REPLICATIONS);

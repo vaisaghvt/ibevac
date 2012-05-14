@@ -20,7 +20,7 @@ import javax.vecmath.Point2d;
 public class MessageCue implements Cue {
 
     public static Ambiguity managementAmbiguity = Ambiguity.ZERO;
-    public static Ambiguity defaultAmbiguity = Ambiguity.ZERO;
+    public static Ambiguity defaultAmbiguity = Ambiguity.SIX;
     private boolean fireIndicator;
 //    private AgentType type;
     private Ambiguity ambiguity;

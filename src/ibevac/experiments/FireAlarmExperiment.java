@@ -18,6 +18,7 @@ import ibevac.engine.IbevacModel;
 public class FireAlarmExperiment {
     public static final int NUMBER_OF_REPLICATIONS = 90;
     public static final int NUMBER_OF_AGENTS = 200;
+     public static final int NUMBER_OF_MANAGEMENT = 0;
     public static final int REPORT_TIME= 500;
     public static final int STARTING_SEED = 20;
     public static final int EXPERIMENT_ID =1;
@@ -31,7 +32,7 @@ public class FireAlarmExperiment {
             DatabaseHandler.instance().checkAndAddExperiment(EXPERIMENT_ID, "Fire Alarm Ambiguity Experiment");
             
             IbevacModel.runLoop(STARTING_SEED, REPORT_TIME, NUMBER_OF_REPLICATIONS, 
-                    NUMBER_OF_AGENTS, EXPERIMENT_ID, args[0]);
+                    NUMBER_OF_AGENTS, NUMBER_OF_MANAGEMENT,  EXPERIMENT_ID, args[0]);
         
         }else {
             System.err.println("Invalid input");
