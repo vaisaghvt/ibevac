@@ -7,25 +7,24 @@ package ibevac.cue;
 
 import ibevac.agent.IbevacAgent;
 import ibevac.environment.IbevacSpace;
+
 import javax.vecmath.Point2d;
 
 
 /**
  * Agents that are running fast create fast agent cues
- * 
- * 
- * 
- *  @author     <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
- *  @version    $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
+ *
+ * @author <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
+ * @version $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
  */
 public class FastAgentCue implements Cue {
 
-//    final Set<PhaseEffect> phaseEffects = new HashSet<>();
-    Point2d location;
- 
-    IbevacSpace space;
-    IbevacAgent agent;
-    
+    //    final Set<PhaseEffect> phaseEffects = new HashSet<>();
+    final Point2d location;
+
+    final IbevacSpace space;
+    final IbevacAgent agent;
+
     public FastAgentCue(IbevacAgent agent, IbevacSpace space) {
         this.location = new Point2d(agent.getLogicalPosition());
 //        phaseEffects.add(new PhaseEffect(Phase.UNUSUAL, Effect.INCREASE_TO_FULL));

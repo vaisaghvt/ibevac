@@ -5,21 +5,23 @@ import abmcs.agent.PhysicalAgent;
 import abmcs.agent.StaticObstacle;
 import abmcs.motionplanning.level1.Level1MotionPlanning;
 import abmcs.motionplanning.level2.SpatialWaypoint;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
+
 import utilities.Geometry;
 
 /**
- * <h4> An implementation of RVO2 for Level1 motino planning. Buggy and slow 
- * because obstacles are not stored in a manner compatible with RVO2 and thus 
+ * <h4> An implementation of RVO2 for Level1 motino planning. Buggy and slow
+ * because obstacles are not stored in a manner compatible with RVO2 and thus
  * it has been necessary to make some adjustments.</h4>
  *
- *  @author     <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
- *  @version    $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
+ * @author <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
+ * @version $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
  */
 public class RVO2 extends Level1MotionPlanning {
 
@@ -29,7 +31,7 @@ public class RVO2 extends Level1MotionPlanning {
     /**
      * Stores the orcalines for calculation
      */
-    List<Line> orcaLines;
+    final List<Line> orcaLines;
     /**
      * TIME_HORIZON 	float (time) 	The minimal amount of time for which the
      * agent's velocities that are computed by the simulation are safe with
@@ -37,15 +39,15 @@ public class RVO2 extends Level1MotionPlanning {
      * will respond to the presence of other agents, but the less freedom the
      * agent has in choosing its velocities. Must be positive.
      */
-    public static double TIME_HORIZON = 30.0;
+    public static final double TIME_HORIZON = 30.0;
     /**
-     *TIME_HORIZON_OBSTACLE 	float (time) 	The minimal amount of time for which the
+     * TIME_HORIZON_OBSTACLE 	float (time) 	The minimal amount of time for which the
      * agent's velocities that are computed by the simulation are safe with respect
      * to obstacles. The larger this number, the sooner this agent will respond
      * to the presence of obstacles, but the less freedom the agent has in choosing
      * its velocities. Must be positive.
      */
-    public static double TIME_HORIZON_OBSTACLE = 5.0;
+    public static final double TIME_HORIZON_OBSTACLE = 5.0;
 
     public RVO2(MovingAgent agent) {
         this.me = agent;
@@ -62,7 +64,8 @@ public class RVO2 extends Level1MotionPlanning {
 
     /**
      * Get's the current spatial waypoint the agent is trying to reach.
-     * @return 
+     *
+     * @return
      */
     @Override
     public SpatialWaypoint getCurrentSpatialWaypoint() {
@@ -70,14 +73,15 @@ public class RVO2 extends Level1MotionPlanning {
     }
 
     /**
-     * Uses RVO2 algorithm to calculate a velocity that will avoid collisions for 
-     * the next few time steps (based on specified parameters). This uses as input 
+     * Uses RVO2 algorithm to calculate a velocity that will avoid collisions for
+     * the next few time steps (based on specified parameters). This uses as input
      * the set of perceived static and dynamic obstacles and a current location
-     * (spatial waypoint) tha thte agent is trying to reach and it calculates 
+     * (spatial waypoint) tha thte agent is trying to reach and it calculates
      * the agent's preferred velocity.
+     *
      * @return Vector representation of preferred velocity
-     * @see WaypointTracker#WaypointTracker(abmcs.agent.MovingAgent) 
-     * @see WaypointTracker#getWaypoint() 
+     * @see WaypointTracker#WaypointTracker(abmcs.agent.MovingAgent, java.util.List)
+     * @see WaypointTracker#getWaypoint()
      */
     @Override
     public Vector2d getPreferredVelocity() {
@@ -109,14 +113,13 @@ public class RVO2 extends Level1MotionPlanning {
         orcaLines.clear();
 
 
-
         TreeMap<Double, StaticObstacle> obses = new TreeMap<Double, StaticObstacle>();
         for (StaticObstacle tempObstacle : obstacles) {
 
             double distanceToObstacleLine;
             if (!obses.containsValue(tempObstacle)) {
                 distanceToObstacleLine = Geometry.calcDistanceToLineSegment(tempObstacle.getStart(), tempObstacle.getEnd(), me.getPosition());
-                obses.put((Double) distanceToObstacleLine, tempObstacle);
+                obses.put(distanceToObstacleLine, tempObstacle);
             }
         }
         Vector2d newVelocity = new Vector2d(preferredVelocity);
@@ -154,9 +157,9 @@ public class RVO2 extends Level1MotionPlanning {
              */
             boolean alreadyCovered = false;
 
-            for (int j = 0; j < orcaLines.size(); ++j) {
+            for (Line orcaLine : orcaLines) {
                 if (checkCovered(invTimeHorizonObst, relativePosition1,
-                        relativePosition2, orcaLines.get(j), me)) {
+                        relativePosition2, orcaLine, me)) {
                     alreadyCovered = true;
 //                    System.out.println("Covered");
                     break;
@@ -191,9 +194,6 @@ public class RVO2 extends Level1MotionPlanning {
             negRelativePosition2.negate();
 
 
-
-
-
             Line line = new Line();
 
             if (s < 0 && distSq1 <= radiusSq) {
@@ -209,7 +209,6 @@ public class RVO2 extends Level1MotionPlanning {
 
 
                 continue;
-
 
 
             } else if (s > 1 && distSq2 <= radiusSq) {
@@ -282,7 +281,6 @@ public class RVO2 extends Level1MotionPlanning {
                 leftLegDirection.scale(1.0f / distSq1);
 
 
-
                 final double LEG2 = Math.sqrt(Math.abs(distSq2 - radiusSq));
                 rightLegDirection = new Vector2d(relativePosition2.getX() * LEG2 + relativePosition2.getY() * me.getDiameter() / 2.0, negRelativePosition2.getX() * me.getDiameter() / 2.0 + relativePosition2.getY() * LEG2);
                 rightLegDirection.scale(1.0f / distSq2);
@@ -310,7 +308,6 @@ public class RVO2 extends Level1MotionPlanning {
 
 //            Vector2d rightNeighborDirection = new Vector2d(rightNeighbor.getPoint());
 //            rightNeighborDirection.sub(obstacle2.getPoint());
-
 
 
             if (Geometry.det(leftLegDirection, negLeftNeighborDirection) >= 0.0f) {
@@ -353,8 +350,6 @@ public class RVO2 extends Level1MotionPlanning {
 
             Vector2d velocityMinusRight = new Vector2d(me.getVelocity());
             velocityMinusRight.sub(RIGHTCUTOFF);
-
-
 
 
             final double T = ((obstacle1.equals(obstacle2)) ? 0.5f : (velocityMinusLeft.dot(CUTOFFVEC) / CUTOFFVEC.dot(CUTOFFVEC)));
@@ -441,7 +436,6 @@ public class RVO2 extends Level1MotionPlanning {
                 line.point = new Point2d(vectorForPoint);
                 assert Math.abs(line.direction.length() - 1.0) < Geometry.EPSILON;
                 orcaLines.add(line);
-                continue;
 
             } else if (DISTSQLEFT <= DISTSQRIGHT) { /* Project on left LEG. */
 
@@ -463,14 +457,12 @@ public class RVO2 extends Level1MotionPlanning {
                 }
                 assert Math.abs(line.direction.length() - 1.0) < Geometry.EPSILON;
                 orcaLines.add(line);
-                continue;
             } else { /* Project on right LEG. */
 
 //                System.out.println("Project on right leg");
                 if (isRightLegForeign) {
                     continue;
                 }
-
 
 
                 line.direction = new Vector2d(rightLegDirection);
@@ -486,7 +478,6 @@ public class RVO2 extends Level1MotionPlanning {
                 }
                 assert Math.abs(line.direction.length() - 1.0) < Geometry.EPSILON;
                 orcaLines.add(line);
-                continue;
             }
 
 
@@ -591,7 +582,6 @@ public class RVO2 extends Level1MotionPlanning {
                 u.scale((combinedRadius * invTimeStep) - wLength);
 
 
-
             }
             Vector2d newU = new Vector2d(u);
             newU.scale(0.5f);
@@ -600,7 +590,6 @@ public class RVO2 extends Level1MotionPlanning {
             line.point = new Point2d(newU);
             assert Math.abs(line.direction.length() - 1.0) < Geometry.EPSILON;
             orcaLines.add(line);
-
 
 
         }

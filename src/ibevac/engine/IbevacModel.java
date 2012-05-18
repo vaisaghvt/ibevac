@@ -23,10 +23,9 @@ import sim.engine.Steppable;
 
 /**
  * The main engine of the simulation. Extends Mason's simState
- * 
- * 
- *  @author     <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
- *  @version    $Revision: 1.0.0.0 $ $Date: 9/Nov/2011 $
+ *
+ * @author <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
+ * @version $Revision: 1.0.0.0 $ $Date: 9/Nov/2011 $
  */
 public class IbevacModel extends SimState {
 
@@ -40,10 +39,10 @@ public class IbevacModel extends SimState {
      */
     private static final String SCENARIO_FILE = "evac_generic_office_building.xml";
     /**
-     * actual scenario file that is used. With an idea that the other one is 
+     * actual scenario file that is used. With an idea that the other one is
      * default and this one can be set from some xml file
      */
-    private String scenarioFile = SCENARIO_FILE;
+    private final String scenarioFile = SCENARIO_FILE;
     /**
      * A reference to the space.
      */
@@ -53,28 +52,28 @@ public class IbevacModel extends SimState {
      * It is neecessary in the portrayal and certain calculations.
      */
     public static double scale;
-    /** 
+    /**
      * A reference to itself to be used by static functions like in IBEVACRNG
      */
     public static IbevacModel model = null;
     /**
      * A collection of the agents that are generated in the simuulation. This is
-     * useful to keep a track of the agents and find out useful data about each 
+     * useful to keep a track of the agents and find out useful data about each
      * agent.
      */
     private Collection<IbevacAgent> agents;
     /**
-     * The number of agents that are generated randomly and passed to the 
+     * The number of agents that are generated randomly and passed to the
      * initializeAgents function of IBEvacSpace
-     * 
-     * @see IbevacSpace#initializeAgentsRandomly(ibevac.datatypes.CEvacuationScenario, int) 
+     *
+     * @see IbevacSpace#initializeAgentsRandomly(ibevac.datatypes.CEvacuationScenario, int)
      */
     private static int numberOfAgents = 200;
     /**
-     * The number of agents that are generated randomly and passed to the 
+     * The number of agents that are generated randomly and passed to the
      * initializeAgents function of IBEvacSpace
-     * 
-     * @see IbevacSpace#initializeManagementStaffRandomly(ibevac.datatypes.CEvacuationScenario, int) 
+     *
+     * @see IbevacSpace#initializeManagementStaffRandomly(ibevac.datatypes.CEvacuationScenario, int)
      */
     private static int numberOfManagers = 0;
 
@@ -87,7 +86,8 @@ public class IbevacModel extends SimState {
 
     /**
      * Creates a model with the seed that is passed to it
-     * @param seed 
+     *
+     * @param seed
      */
     public IbevacModel(long seed) {
         super(seed);
@@ -98,7 +98,7 @@ public class IbevacModel extends SimState {
     }
 
     /**
-     * This function starts the simulation. It first sets up the environment 
+     * This function starts the simulation. It first sets up the environment
      * and stuff and then schedules all the objecta that needs to be scheduled
      */
     @Override
@@ -140,8 +140,8 @@ public class IbevacModel extends SimState {
     }
 
     /**
-     * Called by the start() and initialises the environment and agents and 
-     * other details from the 
+     * Called by the start() and initialises the environment and agents and
+     * other details from the
      */
     private void buildSpace() {
         CEvacuationScenario scenario;
@@ -179,7 +179,7 @@ public class IbevacModel extends SimState {
     }
 
     /**
-     * Called to clear up the current state to recreate everthing for starting 
+     * Called to clear up the current state to recreate everthing for starting
      * the simulation (both for first time and for reruns each time stop is pressed
      */
     private void setup() {
@@ -189,8 +189,9 @@ public class IbevacModel extends SimState {
 
     /**
      * Get the width of the floor
+     *
      * @param floorNumber
-     * @return 
+     * @return
      */
     public int getWidth(int floorNumber) {
         return space.getWidth(floorNumber);
@@ -198,8 +199,9 @@ public class IbevacModel extends SimState {
 
     /**
      * Get the height of the floor.
+     *
      * @param floorNumber
-     * @return 
+     * @return
      */
     public int getHeight(int floorNumber) {
         return space.getHeight(floorNumber);
@@ -207,17 +209,16 @@ public class IbevacModel extends SimState {
 
     /**
      * A reference to Space
-     * @return 
+     *
+     * @return
      */
     public IbevacSpace getSpace() {
         return space;
     }
 
     /**
-     * 
      * @param args
-     * 
-     * @see SimState#doLoop(java.lang.Class, java.lang.String[]) 
+     * @see SimState#doLoop(java.lang.Class, java.lang.String[])
      */
     public static void main(String[] args) {
 
@@ -295,7 +296,7 @@ public class IbevacModel extends SimState {
         }
     }
 
-    public static void runLoop(long seed, int reportTime, int NUMBER_OF_REPLICATIONS, int NUMBER_OF_AGENTS,int NUMBER_OF_MANAGEMENT, int experimentId, String experimentComment) {
+    public static void runLoop(long seed, int reportTime, int NUMBER_OF_REPLICATIONS, int NUMBER_OF_AGENTS, int NUMBER_OF_MANAGEMENT, int experimentId, String experimentComment) {
         numberOfAgents = NUMBER_OF_AGENTS;
         numberOfManagers = NUMBER_OF_MANAGEMENT;
         PEDDataTracker.experimentId = experimentId;

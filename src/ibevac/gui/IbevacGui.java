@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package ibevac.gui;
 
@@ -37,13 +37,11 @@ import sim.util.gui.SimpleColorMap;
 /**
  * This class is responsible for the overall portrayal of the environment.
  * It contains the main that is to be called if the animation is to be seen.
- * As well as all the controls for calling and controlling the different 
+ * As well as all the controls for calling and controlling the different
  * portrayals.
- * 
- * 
- * 
- *  @author     <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
- *  @version    $Revision: 1.0.0.0 $ $Date: 9/Nov/2011 $
+ *
+ * @author <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
+ * @version $Revision: 1.0.0.0 $ $Date: 9/Nov/2011 $
  */
 public class IbevacGui extends GUIState {
 
@@ -51,29 +49,30 @@ public class IbevacGui extends GUIState {
      * A reference to the model.
      */
     private IbevacModel model;
-    
+
     /**
      * The Display2Ds on which everything is drawn. These are like the pallete
      * on which the painting is done. A list is to make one for each floor.
      */
     private ArrayList<Display2D> displays = new ArrayList<Display2D>();
     /**
-     * Creates a frame for each floor. the display mentioned above are kept in 
+     * Creates a frame for each floor. the display mentioned above are kept in
      * each frame.
      */
     private ArrayList<JFrame> displayFrames = new ArrayList<JFrame>();
-    
-   
-    private ArrayList<FastObjectGridPortrayal2D> firePortrayals = new ArrayList<FastObjectGridPortrayal2D>();
-    private ArrayList<FastValueGridPortrayal2D> smokePortrayals = new ArrayList<FastValueGridPortrayal2D>();
-    private ArrayList<ContinuousPortrayal2D> agentPortrayals = new ArrayList<ContinuousPortrayal2D>();
-    private ArrayList<ContinuousPortrayal2D> obstaclePortrayals = new ArrayList<ContinuousPortrayal2D>();
-    private ArrayList<ContinuousPortrayal2D> backgroundPortrayals = new ArrayList<ContinuousPortrayal2D>();
+
+
+    private final ArrayList<FastObjectGridPortrayal2D> firePortrayals = new ArrayList<FastObjectGridPortrayal2D>();
+    private final ArrayList<FastValueGridPortrayal2D> smokePortrayals = new ArrayList<FastValueGridPortrayal2D>();
+    private final ArrayList<ContinuousPortrayal2D> agentPortrayals = new ArrayList<ContinuousPortrayal2D>();
+    private final ArrayList<ContinuousPortrayal2D> obstaclePortrayals = new ArrayList<ContinuousPortrayal2D>();
+    private final ArrayList<ContinuousPortrayal2D> backgroundPortrayals = new ArrayList<ContinuousPortrayal2D>();
 
     /**
-     * The constructor which adds all the required portrayals to each array and 
+     * The constructor which adds all the required portrayals to each array and
      * sets up things to start.
-     * @param state 
+     *
+     * @param state
      */
     IbevacGui(SimState state) {
         super(state);
@@ -102,14 +101,14 @@ public class IbevacGui extends GUIState {
                 }
             });
             firePortrayals.get(floorNumber).setMap(
-                    new SimpleColorMap(  new Color[] {new Color(0, 0, 0, 0), Color.red,
-        Color.orange, Color.yellow}));
+                    new SimpleColorMap(new Color[]{new Color(0, 0, 0, 0), Color.red,
+                            Color.orange, Color.yellow}));
             smokePortrayals.add(new FastValueGridPortrayal2D(false));
-            
+
             smokePortrayals.get(floorNumber).setMap(
-                   new SimpleColorMap(new Color[] { new Color(0,0,0,0)},
-                                        0,SmokeSpace.SMOKE_LIMIT,
-                           new Color(0,0,0,25) , new Color(0,0,0,150)) );
+                    new SimpleColorMap(new Color[]{new Color(0, 0, 0, 0)},
+                            0, SmokeSpace.SMOKE_LIMIT,
+                            new Color(0, 0, 0, 25), new Color(0, 0, 0, 150)));
 
             agentPortrayals.add(new ContinuousPortrayal2D());
 
@@ -123,8 +122,8 @@ public class IbevacGui extends GUIState {
     /**
      * Run at the start of the simulation. Calls the start on the model, sets up
      * the portrayals and then renders all the required frames.
-     * 
-     * @see IbevacGui#setupPortrayals() 
+     *
+     * @see IbevacGui#setupPortrayals()
      */
     @Override
     public void start() {
@@ -137,7 +136,7 @@ public class IbevacGui extends GUIState {
     }
 
     /**
-     * maps each portrayal to the respective field and also sets up the image for 
+     * maps each portrayal to the respective field and also sets up the image for
      * the background portrayal.
      */
     private void setupPortrayals() {
@@ -149,7 +148,7 @@ public class IbevacGui extends GUIState {
 
             smokePortrayals.get(floorNumber).setField(model.getSpace().
                     getSmokeModel().getSmokeSpace(floorNumber));
-            
+
             agentPortrayals.get(floorNumber).setField(
                     model.getSpace().getAgentSpace(floorNumber));
             agentPortrayals.get(floorNumber).setPortrayalForClass(
@@ -174,13 +173,13 @@ public class IbevacGui extends GUIState {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-            int dimension = (int) Math.max((int) (model.getWidth(floorNumber) / IbevacModel.scale), (int) (model.getHeight(floorNumber) / IbevacModel.scale));
+            int dimension = Math.max((int) (model.getWidth(floorNumber) / IbevacModel.scale), (int) (model.getHeight(floorNumber) / IbevacModel.scale));
 
             Continuous2D randomField = new Continuous2D(
                     dimension,
                     1,
                     1);
-            randomField.setObjectLocation(new String(), new Double2D(0.5, 0.5));
+            randomField.setObjectLocation("", new Double2D(0.5, 0.5));
 
             backgroundPortrayals.get(floorNumber).setField(randomField);
             int type = originalImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
@@ -190,11 +189,11 @@ public class IbevacGui extends GUIState {
 
 
             backgroundPortrayals.get(floorNumber).setPortrayalForAll(
-                 
+
                     new ImagePortrayal2D(originalImage.getScaledInstance(
-                    (int) (model.getWidth(floorNumber) / IbevacModel.scale),
-                    (int) (model.getHeight(floorNumber) / IbevacModel.scale),
-                    type)));
+                            (int) (model.getWidth(floorNumber) / IbevacModel.scale),
+                            (int) (model.getHeight(floorNumber) / IbevacModel.scale),
+                            type)));
 
         }
 
@@ -203,7 +202,8 @@ public class IbevacGui extends GUIState {
     /**
      * initializes the controller and the displays and attaches all the portrayals
      * to the display.
-     * @param c 
+     *
+     * @param c
      */
     @Override
     public void init(Controller c) {
@@ -235,7 +235,7 @@ public class IbevacGui extends GUIState {
                     obstaclePortrayals.get(floorNumber), "Obstacles");
 //            displays.get(floorNumber).attach(
 //                    backgroundPortrayals.get(floorNumber), "Background");
-            
+
 
 //            displays.get(floorNumber).setBackdrop(null);
 //
@@ -324,6 +324,6 @@ public class IbevacGui extends GUIState {
         return "<H2>IBEVAC</H2>"
                 + "<p>This is an Information Based Crowd Evacuation Model </p>";
     }
-    
+
 
 }

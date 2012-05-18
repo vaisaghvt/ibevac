@@ -18,15 +18,14 @@ import java.util.Set;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
 /**
- * <h4>This implementation of the Environment Knowledge Module initializes the agent 
- * with knowledge of the complete map stored in scenario. The graph is stored 
- * with the edges being links between the rooms and the vertices being rooms or 
- * areas. Distances between rooms are not stored in the graph and as such aren't 
+ * <h4>This implementation of the Environment Knowledge Module initializes the agent
+ * with knowledge of the complete map stored in scenario. The graph is stored
+ * with the edges being links between the rooms and the vertices being rooms or
+ * areas. Distances between rooms are not stored in the graph and as such aren't
  * used in path planning.</h4>
- * 
- * 
- *  @author     <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
- *  @version    $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
+ *
+ * @author <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
+ * @version $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
  */
 public class CompleteKnowledge implements EnvironmentKnowledgeModule {
 
@@ -35,34 +34,34 @@ public class CompleteKnowledge implements EnvironmentKnowledgeModule {
      * implementation all edges have equal weight. And inaccesible edges have
      * infinite weight. The edges are links between rooms and the nodes are rooms
      * or areas
-     * 
+     *
      * @see CEdge
      */
-    private SimpleWeightedGraph<Integer, CEdge> graph = new SimpleWeightedGraph<Integer, CEdge>(
+    private final SimpleWeightedGraph<Integer, CEdge> graph = new SimpleWeightedGraph<Integer, CEdge>(
             CEdge.class);
     /**
      * A mapping associating area Ids with actual areas/rooms
      */
-    private HashMap<Integer, CArea> roomMapping = new HashMap<Integer, CArea>();
+    private final HashMap<Integer, CArea> roomMapping = new HashMap<Integer, CArea>();
     /**
-     * A mapping associating a getLink with integerID. A getLink connects to areas or 
+     * A mapping associating a getLink with integerID. A getLink connects to areas or
      * rooms
      */
-    private HashMap<Integer, CEdge> linkMapping = new HashMap<Integer, CEdge>();
+    private final HashMap<Integer, CEdge> linkMapping = new HashMap<Integer, CEdge>();
     /**
      * The set of inaccessible logical waypoints.
      */
-    private HashSet<IbevacLogicalWaypoint> inaccessibleWaypoints = new HashSet<IbevacLogicalWaypoint>();
+    private final HashSet<IbevacLogicalWaypoint> inaccessibleWaypoints = new HashSet<IbevacLogicalWaypoint>();
     /**
-     * The area Ids of those rooms which are meeting points. All corridors are 
+     * The area Ids of those rooms which are meeting points. All corridors are
      * set to be meeting points.
      */
-    private HashSet<Integer> corridorList = new HashSet<Integer>();
+    private final HashSet<Integer> corridorList = new HashSet<Integer>();
 
     /**
      * Initializes the graph and mappings from the scenario file. Corridor information
-     * is also stored (explicitly). 
-     * 
+     * is also stored (explicitly).
+     *
      * @param scenario xml file storing all environment information
      */
     public CompleteKnowledge(CEvacuationScenario scenario) {
@@ -129,8 +128,7 @@ public class CompleteKnowledge implements EnvironmentKnowledgeModule {
     }
 
     /**
-     * 
-     * @return the cognitive map graph 
+     * @return the cognitive map graph
      */
     @Override
     public SimpleWeightedGraph<Integer, CEdge> getGraph() {
@@ -138,7 +136,6 @@ public class CompleteKnowledge implements EnvironmentKnowledgeModule {
     }
 
     /**
-     * 
      * @param areaId
      * @return associated edge
      */
@@ -147,7 +144,6 @@ public class CompleteKnowledge implements EnvironmentKnowledgeModule {
     }
 
     /**
-     * 
      * @param areaId
      * @return the associated area
      */
@@ -157,7 +153,6 @@ public class CompleteKnowledge implements EnvironmentKnowledgeModule {
     }
 
     /**
-     * 
      * @param areaId
      * @return associated getLink
      */
@@ -168,10 +163,10 @@ public class CompleteKnowledge implements EnvironmentKnowledgeModule {
 
     /**
      * Marks the waypoint as inaccesible in own graph
-     * 
+     *
      * @param lwaypoint
-     * @return  true    successfullly marked as inaccessible
-     *          false   already inaccessible
+     * @return true    successfullly marked as inaccessible
+     *         false   already inaccessible
      */
     @Override
     public boolean markWaypointAsInaccessible(IbevacLogicalWaypoint lwaypoint) {
@@ -190,9 +185,9 @@ public class CompleteKnowledge implements EnvironmentKnowledgeModule {
     }
 
     /**
-     * Returns the set of the logical waypoints that the agent knows are 
+     * Returns the set of the logical waypoints that the agent knows are
      * inaccessible
-     * 
+     *
      * @return Set of IbevacLogicalWaypoints that are innaccessible
      */
     @Override
@@ -201,9 +196,9 @@ public class CompleteKnowledge implements EnvironmentKnowledgeModule {
     }
 
     /**
-     * Returns the set of corridors that the agent knows about. These are 
+     * Returns the set of corridors that the agent knows about. These are
      * generally the gathering/ milling points in the map
-     * 
+     *
      * @return Set of integer areaIDs of the corridors
      */
     @Override
@@ -213,7 +208,7 @@ public class CompleteKnowledge implements EnvironmentKnowledgeModule {
 
     /**
      * Integer value of the exit
-     * 
+     *
      * @return integer value of the exit.
      */
     @Override

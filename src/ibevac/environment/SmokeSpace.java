@@ -21,15 +21,13 @@ import sim.engine.Stoppable;
 import sim.field.grid.DoubleGrid2D;
 
 /**
- * This class is responsible for handling smoke propagation. It uses a difference 
+ * This class is responsible for handling smoke propagation. It uses a difference
  * euations to model fick's law of diffusion in a Cellular automata. Smoke generators
  * are points at which smoke start and are created at random locations by the fire
  * as it spreads
- * 
- * 
- * 
- *  @author     <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
- *  @version    $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
+ *
+ * @author <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
+ * @version $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
  */
 public final class SmokeSpace implements Steppable {
 
@@ -42,11 +40,11 @@ public final class SmokeSpace implements Steppable {
      * The probability that at a particular timestep a genreator generates smoke
      */
 //    public static final float GENERATION_PROB = 0.5f;
-   
+
     /**
      * THe rate at which smoke spreads
      */
-    public static float DIFFUSION_CONSTANT = 0.021f;
+    public static final float DIFFUSION_CONSTANT = 0.021f;
     /**
      * Maximum amount of smoke in a particular cell.
      */
@@ -55,7 +53,7 @@ public final class SmokeSpace implements Steppable {
      * A serial ID that will be used for checkpoints
      */
     private static final long serialVersionUID = 1L;
-    
+
     /**
      * The actual diffusion constant that is used.
      */
@@ -68,7 +66,7 @@ public final class SmokeSpace implements Steppable {
     /**
      * The list of fields storing the smoke in DoubleGrid2D
      */
-    private ArrayList<DoubleGrid2D> smokeSpaces;
+    private final ArrayList<DoubleGrid2D> smokeSpaces;
     /**
      * The set of cells. Stored seperately from the DoubleGrid to enable easy
      * access and editting.
@@ -84,62 +82,59 @@ public final class SmokeSpace implements Steppable {
     private int height = 0;
     /**
      * This is the number of pixels per cell. A large value means larger cells are used
-     * A smaller value results in lower number of pixels per cell. 
+     * A smaller value results in lower number of pixels per cell.
      */
     private int resolution = 1;
     /**
      * The set of smoke generators which are points from which smoke is created
      * They can be considered to be flamable
      */
-    private HashSet<SmokeGenerator> smokeGenerators = new HashSet<SmokeGenerator>();
+    private final HashSet<SmokeGenerator> smokeGenerators = new HashSet<SmokeGenerator>();
     /**
      * The list of small rooms that already have smoke. Increases the efficiency
      * of determining which rooms have smoke already.
      */
-    private HashMap<SmallRoom, Float> smallRoomsWithSmoke = new HashMap<SmallRoom, Float>();
+    private final HashMap<SmallRoom, Float> smallRoomsWithSmoke = new HashMap<SmallRoom, Float>();
     /**
      * The list of small rooms that already have smoke. Increases the efficiency
      * of determining which rooms have smoke already.
      */
     private HashSet<SmallRoom> smallRoomsWithGenerators = new HashSet<SmallRoom>();
     /**
-     * The set of smokes that haven't already saturated with smoke or will start 
+     * The set of smokes that haven't already saturated with smoke or will start
      * smoking reasonably soon.
      */
-    private HashSet<Cell> smokingCells = new HashSet<Cell>();
+    private final HashSet<Cell> smokingCells = new HashSet<Cell>();
     /**
      * A reference to IBEVAC SPace
      */
-    private IbevacSpace space;
+    private final IbevacSpace space;
     /**
      * Internal variable used to keep a track of cells to be added from spreading cellss
      */
-    private HashSet<Cell> cellsToBeAdded = new HashSet<Cell>();
+    private final HashSet<Cell> cellsToBeAdded = new HashSet<Cell>();
     /**
      * omternal vairable used to keep a track of cells to be removed from spreading cells
      */
-    private HashSet<Cell> cellsToBeRemoved = new HashSet<Cell>();
+    private final HashSet<Cell> cellsToBeRemoved = new HashSet<Cell>();
     /**
      * omternal vairable used to keep a track of cells to be removed from spreading cells
      */
-    private HashSet<SmokeGenerator> generatorsToBeRemoved = new HashSet<SmokeGenerator>();
+    private final HashSet<SmokeGenerator> generatorsToBeRemoved = new HashSet<SmokeGenerator>();
 
     /**
-     * 
      * @param scenario
      * @param resolution in number of cm per grid.
      * @param space
-     * 
      * @see SmokeSpace#resolution
      */
     public SmokeSpace(CEvacuationScenario scenario, int resolution, IbevacSpace space) {
 
 
-
         this.resolution = resolution;
 
         this.space = space;
-        actualDiffusionConstant = (DIFFUSION_CONSTANT*10000.0) /(resolution * resolution);
+        actualDiffusionConstant = (DIFFUSION_CONSTANT * 10000.0) / (resolution * resolution);
 
         for (CFloor floor : scenario.getFloors()) {
             if (floor.getWidth() > width) {
@@ -156,14 +151,14 @@ public final class SmokeSpace implements Steppable {
         smokeSpaces = new ArrayList<DoubleGrid2D>(scenario.getFloors().size());
 
         for (int i = 0;
-                i < scenario.getFloors().size();
-                ++i) {
+             i < scenario.getFloors().size();
+             ++i) {
             smokeSpaces.add(new DoubleGrid2D(width, height));
         }
 
         for (int i = 0;
-                i < cells.length;
-                ++i) {
+             i < cells.length;
+             ++i) {
             for (int j = 0; j < cells[i].length; ++j) {
                 for (int k = 0; k < cells[i][j].length; ++k) {
                     cells[i][j][k] = new Cell(i, j, k);
@@ -171,19 +166,17 @@ public final class SmokeSpace implements Steppable {
             }
         }
 
-        for (int i = 0;
-                i < cells.length;
-                ++i) {
-            for (int j = 0; j < cells[i].length; ++j) {
-                for (int k = 0; k < cells[i][j].length; ++k) {
-                    cells[i][j][k].initializeNeighbors();
+        for (Cell[][] cell : cells) {
+            for (int j = 0; j < cell.length; ++j) {
+                for (int k = 0; k < cell[j].length; ++k) {
+                    cell[j][k].initializeNeighbors();
                 }
             }
         }
         // initialise the cells
 
         for (int i = 0;
-                i < scenario.getFloors().size(); i++) {
+             i < scenario.getFloors().size(); i++) {
             int l = 2 * i;
 //            if (!fireAlarmRunning) {
 //                startFireAlarm();
@@ -228,12 +221,13 @@ public final class SmokeSpace implements Steppable {
     }
 
     /**
-     * Besides scheduling and storring the steppable. This function sets the 
-     * value of diffusion constant appropriately based on the value of the 
+     * Besides scheduling and storring the steppable. This function sets the
+     * value of diffusion constant appropriately based on the value of the
      * timestep.s
+     *
      * @param model
      * @param ordering
-     * @param timestep 
+     * @param timestep
      */
     public void schedule(IbevacModel model, int ordering, double timestep) {
         actualDiffusionConstant *= (timestep / 10.0);
@@ -242,15 +236,14 @@ public final class SmokeSpace implements Steppable {
     }
 
     /**
-     * 
-     * The step function that is executed by the schedule. This first generates smoek 
+     * The step function that is executed by the schedule. This first generates smoek
      * at the generators and then uses the fick's law of diffusion to calculate the
      * new smoke at all locations in a CA based approach.
-     * @param state 
+     *
+     * @param state
      */
     @Override
     public void step(SimState state) {
-
 
 
         for (Cell cell : smokingCells) {
@@ -283,12 +276,13 @@ public final class SmokeSpace implements Steppable {
 
     }
 
-   
+
     /**
      * Add a generator at a particular cell
+     *
      * @param i
      * @param j
-     * @param k 
+     * @param k
      */
     void addGenerator(int i, int j, int k) {
         i /= resolution;
@@ -313,10 +307,11 @@ public final class SmokeSpace implements Steppable {
     }
 
     /**
-     * Returns the amount of smoke in that room. sum of all the individual 
+     * Returns the amount of smoke in that room. sum of all the individual
      * smoke in that small room.
+     *
      * @param room
-     * @return 
+     * @return
      */
     float getSmokeInRoom(SmallRoom room) {
         if (smallRoomsWithSmoke.containsKey(room)) {
@@ -328,10 +323,11 @@ public final class SmokeSpace implements Steppable {
 
     /**
      * returns if there is greater than a threshold value of smoke
+     *
      * @param floorIdx
      * @param x
      * @param y
-     * @return 
+     * @return
      */
     public boolean isAreaSmoky(int floorIdx, int x, int y) {
         int i = 2 * floorIdx;
@@ -360,20 +356,20 @@ public final class SmokeSpace implements Steppable {
         /**
          * Smoke cannot spread here.
          */
-        UNSMOKABLE;
-    };
+        UNSMOKABLE
+    }
 
     private class SmokeGenerator {
 
         /**
          * The location of the smoke gnerator
          */
-        private Cell location;
+        private final Cell location;
         /**
          * The asmount of smoke generated by the smoke generator when it does
          * release some smoke
          */
-        private float generationValue;
+        private final float generationValue;
         private final int hash;
 
         public SmokeGenerator(Cell cell) {
@@ -409,10 +405,7 @@ public final class SmokeSpace implements Steppable {
                 return false;
             }
             final SmokeGenerator other = (SmokeGenerator) obj;
-            if (!this.location.equals(other.location)) {
-                return false;
-            }
-            return true;
+            return this.location.equals(other.location);
         }
 
         @Override
@@ -430,12 +423,12 @@ public final class SmokeSpace implements Steppable {
          * The actual amount of smoke in that cell
          */
         private float smoke = 0;
-        private Set<Cell> immediateNeighbours;
-        private Set<Cell> allNeighbours;
+        private final Set<Cell> immediateNeighbours;
+        private final Set<Cell> allNeighbours;
         private SmokableState smokable;
         /**
-         * temporary storage to store amount of smoke which will be stored into 
-         * actual smoke value only when it has been used to update all 
+         * temporary storage to store amount of smoke which will be stored into
+         * actual smoke value only when it has been used to update all
          */
         private float tempValue = 0;
         private float prevValue = -1;
@@ -488,7 +481,7 @@ public final class SmokeSpace implements Steppable {
                     } else {
                         space.putCueInSmallRoom(
                                 new SmokeCue(
-                                j * resolution, k * resolution, smoke + smallRoomsWithSmoke.get(smallRoom)),
+                                        j * resolution, k * resolution, smoke + smallRoomsWithSmoke.get(smallRoom)),
                                 smallRoom);
                         smallRoomsWithSmoke.put(smallRoom, smoke + smallRoomsWithSmoke.get(smallRoom));
                     }
@@ -548,10 +541,7 @@ public final class SmokeSpace implements Steppable {
             if (this.j != other.j) {
                 return false;
             }
-            if (this.k != other.k) {
-                return false;
-            }
-            return true;
+            return this.k == other.k;
 
         }
 

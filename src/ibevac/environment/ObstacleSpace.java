@@ -17,34 +17,34 @@ import sim.field.continuous.Continuous2D;
 import sim.util.Double2D;
 import abmcs.agent.StaticObstacle;
 import ibevac.EvacConstants;
+
 import javax.vecmath.Point2d;
+
 import sim.util.Bag;
 
 /**
  * This class is responsible for handling and storing agents.
- * 
- * 
- * 
- *  @author     <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
- *  @version    $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
+ *
+ * @author <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
+ * @version $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
  */
 public class ObstacleSpace {
 
     /**
      * The fields on which the obstacles are stored
      */
-    private ArrayList<Continuous2D> obstacleSpaces;
-    
+    private final ArrayList<Continuous2D> obstacleSpaces;
+
     /**
      * The obstacle lines in each area
      */
-    private Map<Integer, Set<LineSegment>> obstacleLinesByArea;
-    
+    private final Map<Integer, Set<LineSegment>> obstacleLinesByArea;
+
     /**
      * The set of obstacle lines in each floor
      */
-    private Map<Integer, Set<LineSegment>> obstacleLinesByFloor;
-    private RealWorldLayout realWorld;
+    private final Map<Integer, Set<LineSegment>> obstacleLinesByFloor;
+    private final RealWorldLayout realWorld;
 
     public ObstacleSpace(RealWorldLayout realWorld, int numberOfFloors) {
         obstacleSpaces = new ArrayList<Continuous2D>(numberOfFloors);
@@ -74,14 +74,13 @@ public class ObstacleSpace {
         this.obstacleLinesByFloor.get(floor).add(tempObstacle.getLine());
 
 
-
         Point2d startPos = IbevacSpace.translateToLogicalLocation(tempObstacle.getLine().getStart(),
                 realWorld.getOffset(floor));
 
         obstacleSpaces.get(floor).setObjectLocation(
                 tempObstacle,
                 new Double2D(startPos.getX() / IbevacModel.scale,
-                startPos.getY() / IbevacModel.scale));
+                        startPos.getY() / IbevacModel.scale));
 
         // obstacleSpaces.get(floor).setObjectLocation(
         // tempObstacle,
@@ -137,7 +136,7 @@ public class ObstacleSpace {
         HashSet<LineSegment> allObstacles = new HashSet<LineSegment>();
         for (Set<LineSegment> obstaclesByFloor : obstacleLinesByFloor.values()) {
 //            for (StaticObstacle obstacle : obstaclesByArea) {
-                allObstacles.addAll(obstaclesByFloor);
+            allObstacles.addAll(obstaclesByFloor);
 //            }
         }
         return allObstacles;
@@ -148,7 +147,7 @@ public class ObstacleSpace {
 
         return obstacleSpaces.get(me.getCurrentFloorId()).getObjectsExactlyWithinDistance(
                 new Double2D(me.getLogicalPosition().getX() / IbevacModel.scale,
-                me.getLogicalPosition().getY() / IbevacModel.scale),
+                        me.getLogicalPosition().getY() / IbevacModel.scale),
                 radius);
     }
 }

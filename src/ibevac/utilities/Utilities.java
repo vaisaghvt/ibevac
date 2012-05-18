@@ -10,17 +10,16 @@ import ibevac.datatypes.CFloor;
 import ibevac.datatypes.CLink;
 import ibevac.datatypes.CRoom;
 import ibevac.datatypes.CStaircase;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * A number of geometric functions / utilities that might be useful to the other 
+ * A number of geometric functions / utilities that might be useful to the other
  * classes but are not necessarilly a part of any of the classes.
- * 
- * 
- * 
- *  @author     <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
- *  @version    $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
+ *
+ * @author <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
+ * @version $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
  */
 public final class Utilities {
 
@@ -29,9 +28,10 @@ public final class Utilities {
 
     /**
      * checks if the x value lies on one of the vertical lines of the CArea
+     *
      * @param x
      * @param area
-     * @return 
+     * @return
      */
     public static boolean isOverlappingWithVLine(int x, CArea area) {
         int mnx = Math.min(area.getCorner0().getX(), area.getCorner1().getX());
@@ -40,11 +40,12 @@ public final class Utilities {
     }
 
     /**
-     * Checks if the y value passed lies on one of the horizontal edges of the 
+     * Checks if the y value passed lies on one of the horizontal edges of the
      * area
+     *
      * @param y
      * @param area
-     * @return 
+     * @return
      */
     public static boolean isOverlappingWithHLine(int y, CArea area) {
         int mny = Math.min(area.getCorner0().getY(), area.getCorner1().getY());
@@ -53,9 +54,9 @@ public final class Utilities {
     }
 
     /**
-     * Convert pixel units into metric units. To be more precise: [px] are 
+     * Convert pixel units into metric units. To be more precise: [px] are
      * converted to [cm] by means of the scenario-specific scaling factor!
-     * 
+     * <p/>
      * WARNING: Don't call this function multiple times on the same scenario.
      * Otherwise the scenario will be scaled multiple times.
      */
@@ -171,16 +172,13 @@ public final class Utilities {
         double mua = numera / denom;
         double mub = numerb / denom;
 
-        if (mua < 0 || mua > 1 || mub < 0 || mub > 1) {
-            return false;
-        }
+        return !(mua < 0 || mua > 1 || mub < 0 || mub > 1);
 
-        return true;
     }
 
     /**
-     *extract the four sides from an area in precisely this order:
-     *double[] {left, top, right, bottom}
+     * extract the four sides from an area in precisely this order:
+     * double[] {left, top, right, bottom}
      */
     public static Collection<LineSegment> extractSidesFromArea(CArea area) {
         int x0 = area.getCorner0().getX();
@@ -207,7 +205,8 @@ public final class Utilities {
         return sides;
     }
 
-    /** Calculates the time until collision of two circles with initial positions pa/pb, velocities va/vb, and radii ra/rb.
+    /**
+     * Calculates the time until collision of two circles with initial positions pa/pb, velocities va/vb, and radii ra/rb.
      * Returns either time until collision or null (if no collision)
      * based on: http://code.google.com/p/xna-circle-collision-detection/
      * see also: http://twobitcoder.blogspot.com/2010/04/circle-collision-detection.html

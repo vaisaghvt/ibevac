@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package ibevac.agent.perception;
 
@@ -18,30 +18,30 @@ import java.util.Set;
 
 import abmcs.agent.StaticObstacle;
 import ibevac.cue.Cue;
+
 import java.util.ArrayList;
 import javax.vecmath.Point2d;
 
-/**@deprecated 
+/**
  * @author heiko
- * 
+ * @deprecated
  */
 public class NormalPerception implements Perception {
 
-    private IbevacSpace space;
-    private IbevacAgent me;
+    private final IbevacSpace space;
+    private final IbevacAgent me;
     // private EnvironmentKnowledgeBase environmentKnowledge;
     // private EventKnowledgeBase eventKnowledge;
     // private double sensorRange;
     private int currentFloorIdx = -1;
     private int currentAreaId = -1;
-     /**
-     * If another agent is within this space the agent shrinks to create space 
+    /**
+     * If another agent is within this space the agent shrinks to create space
      * for movement
      */
     private Set<IbevacAgent> personalSpace = new HashSet<IbevacAgent>();
     /**
      * Currently the set of agents occupying space in which agents can exchange information about inaccessible links
-     * 
      */
     private Set<IbevacAgent> socialSpace = new HashSet<IbevacAgent>();
     /**
@@ -54,18 +54,17 @@ public class NormalPerception implements Perception {
     private Set<IbevacAgent> perceivedPeople = new HashSet<IbevacAgent>();
     /**
      * Set of static obstacles that the agent tries to avoid a collission with
-     * 
      */
     private Set<StaticObstacle> perceivedStaticObstacles = new HashSet<StaticObstacle>();
     /**
      * Set of cues that are perceived by the agent
      */
     private Set<Cue> perceivedCues = new HashSet<Cue>();
-    
+
     private Set<IbevacAgent> peers = new HashSet<IbevacAgent>();
 
     public NormalPerception(IbevacSpace space, IbevacAgent agent,
-            int currentFloorIdx, int currentAreaId) {
+                            int currentFloorIdx, int currentAreaId) {
         this.space = space;
         me = agent;
 
@@ -158,7 +157,7 @@ public class NormalPerception implements Perception {
     }
 
     private Set<StaticObstacle> getClosedRoomObstacleLines(CArea area,
-            CLink exclusion) {
+                                                           CLink exclusion) {
         Set<StaticObstacle> obstacles = new HashSet<StaticObstacle>();
 
         // first, add the obstacle lines for this area
@@ -303,10 +302,10 @@ public class NormalPerception implements Perception {
 
     @Override
     public boolean hasCues() {
-           return !this.perceivedCues.isEmpty();
+        return !this.perceivedCues.isEmpty();
     }
-    
-      @Override
+
+    @Override
     public synchronized Set<IbevacAgent> getShoutingSpace() {
         return socialSpace;
     }

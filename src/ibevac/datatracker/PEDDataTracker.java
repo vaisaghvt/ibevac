@@ -12,6 +12,7 @@ import ibevac.agent.planner.states.Escaping;
 import ibevac.agent.planner.states.Exploring;
 import ibevac.agent.planner.states.Milling;
 import ibevac.engine.IbevacModel;
+
 import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -32,7 +33,6 @@ import javax.vecmath.Vector2d;
 import sim.engine.SimState;
 
 /**
- *
  * @author vaisaghvt
  */
 public class PEDDataTracker implements DataTracker {
@@ -48,7 +48,7 @@ public class PEDDataTracker implements DataTracker {
     private int exploringNumber;
     private int millingNumber;
     private int escapingNumber;
-//    private boolean runCompleted;
+    //    private boolean runCompleted;
     public static PEDDataTracker instance = null;
     private final Collection<? extends IbevacAgent> agentList;
 
@@ -136,7 +136,6 @@ public class PEDDataTracker implements DataTracker {
             }
 
 
-
         }
 
 
@@ -186,12 +185,13 @@ public class PEDDataTracker implements DataTracker {
 
     /**
      * Binary file of the following format created in specified file location:
-     * 
+     * <p/>
      * number of agents
      * agentId numberOfData data1 data2 ...
+     *
      * @param <E>
      * @param fileName
-     * @param dataForAgent 
+     * @param dataForAgent
      */
     public static <E extends Number> void writeToFileAgentNumberList(String fileName, ArrayListMultimap<Integer, Integer> dataForAgent) {
         try {
@@ -235,6 +235,7 @@ public class PEDDataTracker implements DataTracker {
 
             writer.close();
         } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -250,24 +251,24 @@ public class PEDDataTracker implements DataTracker {
     @Override
     public void storeToDatabase() {
         int minStart = Integer.MAX_VALUE;
-        int completionTime =0;
+        int completionTime = 0;
         int maxStart = Integer.MIN_VALUE;
         try {
             //        assert runCompleted = true;
 //            completionTime = (int) model.schedule.getSteps();
-           
+
             int runId = DatabaseHandler.instance().addRunInfo(PEDDataTracker.experimentId, PEDDataTracker.comment, (int) model.seed(), safeNumber);
             for (IbevacAgent agent : this.agentList) {
                 DatabaseHandler.instance().addAgentSummary(runId, agent.getId(), agent.getHomeId(),
                         agent.getState(), agent.getLifeTime(), agent.getSpeedStat(), agent.getEvacStartTime(), agent.getEvacuationTime());
                 if (agent.getEvacStartTime() < minStart) {
                     minStart = agent.getEvacStartTime();
-                } 
+                }
                 if (agent.getEvacStartTime() > maxStart) {
                     maxStart = agent.getEvacStartTime();
                 }
-                
-                 if (agent.getLifeTime() > completionTime) {
+
+                if (agent.getLifeTime() > completionTime) {
                     completionTime = agent.getLifeTime();
                 } else if (agent.getEvacuationTime() > completionTime) {
                     completionTime = agent.getEvacuationTime();

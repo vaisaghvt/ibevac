@@ -16,9 +16,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for CPoint complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="CPoint">
  *   &lt;complexContent>
@@ -29,8 +29,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CPoint")
@@ -43,11 +41,9 @@ public class CPoint {
 
     /**
      * Gets the value of the x property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is
+     *         {@link Integer }
      */
     public Integer getX() {
         return x;
@@ -55,11 +51,9 @@ public class CPoint {
 
     /**
      * Sets the value of the x property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Integer }
      */
     public void setX(Integer value) {
         this.x = value;
@@ -67,11 +61,9 @@ public class CPoint {
 
     /**
      * Gets the value of the y property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is
+     *         {@link Integer }
      */
     public Integer getY() {
         return y;
@@ -79,11 +71,9 @@ public class CPoint {
 
     /**
      * Sets the value of the y property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Integer }
      */
     public void setY(Integer value) {
         this.y = value;
@@ -101,10 +91,7 @@ public class CPoint {
         if (this.x != other.x && (this.x == null || !this.x.equals(other.x))) {
             return false;
         }
-        if (this.y != other.y && (this.y == null || !this.y.equals(other.y))) {
-            return false;
-        }
-        return true;
+        return !(this.y != other.y && (this.y == null || !this.y.equals(other.y)));
     }
 
     @Override

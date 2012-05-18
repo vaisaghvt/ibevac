@@ -14,34 +14,34 @@ import java.util.Set;
 import abmcs.agent.StaticObstacle;
 import ibevac.cue.FastAgentCue;
 import ibevac.cue.SlowAgentCue;
+
 import javax.vecmath.Point2d;
 
 /**
  * <h4> In this implementation of perception the other people or dynamic obstacles
- * are perceived from only the agent's own room. Cues are perceived from the 
- * small room. and static obstacles are perceived within a circular radius of 
+ * are perceived from only the agent's own room. Cues are perceived from the
+ * small room. and static obstacles are perceived within a circular radius of
  * the agent using obstacle space.</h4>
- * 
- *  @author     <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
- *  @version    $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
+ *
+ * @author <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
+ * @version $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
  */
 public class IbevacPerception implements Perception {
 
-    private IbevacSpace space;
-    private IbevacAgent me;
+    private final IbevacSpace space;
+    private final IbevacAgent me;
     // private EnvironmentKnowledgeBase environmentKnowledge;
     // private EventKnowledgeBase eventKnowledge;
     // private double sensorRange;
     private int currentFloorIdx = -1;
     private int currentAreaId = -1;
     /**
-     * If another agent is within this space the agent shrinks to create space 
+     * If another agent is within this space the agent shrinks to create space
      * for movement
      */
     private Set<IbevacAgent> personalSpace = new HashSet<IbevacAgent>();
     /**
      * Currently the set of agents occupying space in which agents can exchange information about inaccessible links
-     * 
      */
     private Set<IbevacAgent> socialSpace = new HashSet<IbevacAgent>();
     /**
@@ -54,7 +54,6 @@ public class IbevacPerception implements Perception {
     private Set<IbevacAgent> perceivedPeople = new HashSet<IbevacAgent>();
     /**
      * Set of static obstacles that the agent tries to avoid a collission with
-     * 
      */
     private Set<StaticObstacle> perceivedStaticObstacles = new HashSet<StaticObstacle>();
     /**
@@ -63,7 +62,7 @@ public class IbevacPerception implements Perception {
     private Set<Cue> perceivedCues = new HashSet<Cue>();
 
     public IbevacPerception(IbevacSpace space, IbevacAgent agent,
-            int currentFloorIdx, int currentAreaId) {
+                            int currentFloorIdx, int currentAreaId) {
         this.space = space;
         me = agent;
 
@@ -72,8 +71,8 @@ public class IbevacPerception implements Perception {
     }
 
     /**
-     *  Other people or dynamic obstacles are perceived from only the agent's 
-     * own room. Cues are perceived from the small room. and static obstacles 
+     * Other people or dynamic obstacles are perceived from only the agent's
+     * own room. Cues are perceived from the small room. and static obstacles
      * are perceived within a circular radius of the agent using obstacle space.
      */
     @Override
@@ -138,9 +137,9 @@ public class IbevacPerception implements Perception {
     }
 
     /**
-     * @see Perception#handleTeleport(int, int) 
      * @param floorIdx
-     * @param areaId 
+     * @param areaId
+     * @see Perception#handleTeleport(int, int)
      */
     @Override
     public synchronized void handleTeleport(int floorIdx, int areaId) {
@@ -149,8 +148,8 @@ public class IbevacPerception implements Perception {
     }
 
     /**
-     * @see Perception#exitReached() 
-     * @return 
+     * @return
+     * @see Perception#exitReached()
      */
     @Override
     public synchronized boolean exitReached() {
@@ -159,9 +158,9 @@ public class IbevacPerception implements Perception {
     }
 
     /**
-     * @see Perception#getPersonalSpace() 
-     * @see #update() 
-     * @return 
+     * @return
+     * @see Perception#getPersonalSpace()
+     * @see #update()
      */
     @Override
     public synchronized Set<IbevacAgent> getPersonalSpace() {
@@ -169,9 +168,9 @@ public class IbevacPerception implements Perception {
     }
 
     /**
-     * @see Perception#getSocialSpace() 
-     * @see #update() 
-     * @return 
+     * @return
+     * @see Perception#getSocialSpace()
+     * @see #update()
      */
     @Override
     public synchronized Set<IbevacAgent> getSocialSpace() {
@@ -179,9 +178,9 @@ public class IbevacPerception implements Perception {
     }
 
     /**
-     * @see Perception#getShoutingSpace() 
-     * @see #update() 
-     * @return 
+     * @return
+     * @see Perception#getShoutingSpace()
+     * @see #update()
      */
     @Override
     public synchronized Set<IbevacAgent> getShoutingSpace() {
@@ -189,9 +188,9 @@ public class IbevacPerception implements Perception {
     }
 
     /**
-     * @see Perception#getPerceivedDynamicObstacles() 
-     * @see #update() 
-     * @return 
+     * @return
+     * @see Perception#getPerceivedDynamicObstacles()
+     * @see #update()
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -200,20 +199,22 @@ public class IbevacPerception implements Perception {
     }
 
     /**
-     * @see Perception#getPerceivedStaticObstacles() 
-     * @see #update() 
-     * @return 
+     * @return
+     * @see Perception#getPerceivedStaticObstacles()
+     * @see #update()
      */
     @Override
     public synchronized Set<StaticObstacle> getPerceivedStaticObstacles() {
         return perceivedStaticObstacles;
     }
 
-    /**Determines the accessibility of the current Waypoint by checking it's 
+    /**
+     * Determines the accessibility of the current Waypoint by checking it's
      * lethality at both the fire and smoke space
-     * @see Perception#isCurrentWaypointAccessible() 
-     * @see #update() 
-     * @return 
+     *
+     * @return
+     * @see Perception#isCurrentWaypointAccessible()
+     * @see #update()
      */
     @Override
     public synchronized boolean isCurrentWaypointAccessible() {
@@ -257,8 +258,8 @@ public class IbevacPerception implements Perception {
     }
 
     /**
-     * Determines the current area Id and moves the agent to it's correct 
-     * logical position if it's physical moveent has caused it to move from one 
+     * Determines the current area Id and moves the agent to it's correct
+     * logical position if it's physical moveent has caused it to move from one
      * area to the next.
      */
     private void determineCurrentAreaId() {
@@ -276,9 +277,9 @@ public class IbevacPerception implements Perception {
         }
     }
 
-    /** 
-     * @see #update() 
-     * @return 
+    /**
+     * @return
+     * @see #update()
      */
     @Override
     public Set<Cue> getCues() {

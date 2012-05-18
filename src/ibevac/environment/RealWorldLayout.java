@@ -27,46 +27,47 @@ import abmcs.agent.StaticObstacle;
 import sim.util.Bag;
 
 /**
- * This class stores the majority of  the environment information available from 
+ * This class stores the majority of  the environment information available from
  * the scenario file like the image of the environment, rooms, the floors the staircases, the links
  * and the connections and the mappings. It also stored agent and obstacle information by delegating
  * these functions to the Agent and Obstacle Space.
+ *
  * @author vaisagh
  */
 public class RealWorldLayout {
 
-    private ObstacleSpace obstacleSpace;
-    private AgentSpace agentSpace;
+    private final ObstacleSpace obstacleSpace;
+    private final AgentSpace agentSpace;
     /**
-     * The offsets for each floor. The physical environment is a 2D map even if 
-     * there are multiple floors. Thisis handlaed by storing the offset for each 
-     * floor. i.e. the first floor is in physical terms stored to the right of 
+     * The offsets for each floor. The physical environment is a 2D map even if
+     * there are multiple floors. Thisis handlaed by storing the offset for each
+     * floor. i.e. the first floor is in physical terms stored to the right of
      * the 0th floor.
      */
-    private List<Integer> offsets = new ArrayList<Integer>();
+    private final List<Integer> offsets = new ArrayList<Integer>();
     /**
      * The location of the file storing the image of the environment.
      */
-    private List<String> images = new ArrayList<String>();
-    private ArrayList<Integer> floorXSize = new ArrayList<Integer>();
-    private ArrayList<Integer> floorYSize = new ArrayList<Integer>();
-    private ArrayList<CArea> exits = new ArrayList<CArea>();
+    private final List<String> images = new ArrayList<String>();
+    private final ArrayList<Integer> floorXSize = new ArrayList<Integer>();
+    private final ArrayList<Integer> floorYSize = new ArrayList<Integer>();
+    private final ArrayList<CArea> exits = new ArrayList<CArea>();
     /**
      * The CArea associated with each Area id.
      */
-    private Map<Integer, CArea> areaByIdMapping = new HashMap<Integer, CArea>();
+    private final Map<Integer, CArea> areaByIdMapping = new HashMap<Integer, CArea>();
     /**
      * Returns the floor for a particular area.
      */
-    private Map<Integer, Integer> floorByAreaIdMapping = new HashMap<Integer, Integer>();
+    private final Map<Integer, Integer> floorByAreaIdMapping = new HashMap<Integer, Integer>();
     /**
-     *Returns the staircase for a particulaar staircase ID 
+     * Returns the staircase for a particulaar staircase ID
      */
-    private Map<Integer, CStaircase> staircases = new HashMap<Integer, CStaircase>();
+    private final Map<Integer, CStaircase> staircases = new HashMap<Integer, CStaircase>();
     /**
      * Returns the set of links connected to each room or area ID
      */
-    private Map<Integer, Set<CLink>> linksByRoomIdMapping = new HashMap<Integer, Set<CLink>>();
+    private final Map<Integer, Set<CLink>> linksByRoomIdMapping = new HashMap<Integer, Set<CLink>>();
 
     public RealWorldLayout(CEvacuationScenario scenario, double d) {
 
@@ -156,7 +157,6 @@ public class RealWorldLayout {
     }
 
     /**
-     * 
      * Create obstacle lines for a given floor
      */
     private void createObstacleLines(CFloor floor, int offset) {
@@ -312,8 +312,8 @@ public class RealWorldLayout {
     }
 
     private void addVObstacleLine(CArea area, int x, int mny, int mxy,
-            int offset, Set<CLink> links,
-            HashMap<CLink, LinkedList<int[]>> intersectionPoints) {
+                                  int offset, Set<CLink> links,
+                                  HashMap<CLink, LinkedList<int[]>> intersectionPoints) {
         ArrayList<Integer> yPoints = new ArrayList<Integer>();
         yPoints.add(mny);
         yPoints.add(mxy);
@@ -356,8 +356,8 @@ public class RealWorldLayout {
     }
 
     private void addHObstacleLine(CArea area, int y, int mnx, int mxx,
-            int offset, Set<CLink> links,
-            HashMap<CLink, LinkedList<int[]>> intersectionPoints) {
+                                  int offset, Set<CLink> links,
+                                  HashMap<CLink, LinkedList<int[]>> intersectionPoints) {
         ArrayList<Integer> xPoints = new ArrayList<Integer>();
         xPoints.add(mnx);
         xPoints.add(mxx);
@@ -420,7 +420,7 @@ public class RealWorldLayout {
     }
 
     public int getFloorByAreaId(int areaId) {
-        if (floorByAreaIdMapping.containsKey((Integer) areaId)) {
+        if (floorByAreaIdMapping.containsKey(areaId)) {
             return floorByAreaIdMapping.get(areaId);
         } else {
             System.out.println(areaId + " not found in list of size "
@@ -559,7 +559,7 @@ public class RealWorldLayout {
     }
 
     public Point2d findValidPointForAgent(int mnx, int mny, int mxx, int mxy,
-            double size, int floorIndex) {
+                                          double size, int floorIndex) {
         return agentSpace.findValidPointForAgent(mnx, mny, mxx, mxy, size, floorIndex);
     }
 
@@ -583,7 +583,7 @@ public class RealWorldLayout {
     }
 
     public Collection<? extends IbevacAgent> getAgentsInRadius(IbevacAgent me,
-            double radius) {
+                                                               double radius) {
 
         return agentSpace.getAgentsInRadius(me, radius);
     }
@@ -610,7 +610,7 @@ public class RealWorldLayout {
             int mny = Math.min(exit.getCorner0().getY(), exit.getCorner1().getY());
             int mxy = Math.max(exit.getCorner0().getY(), exit.getCorner1().getY());
 
-            int x = (int) (mnx);
+            int x = mnx;
             int y = (int) (0.5 * (mny + mxy));
 //               if(!fireSpace.isAreaLethal(floorIdx, x, y)) {
 //                    return false;

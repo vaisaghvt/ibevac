@@ -22,20 +22,20 @@ import abmcs.motionplanning.level3.LogicalWaypoint;
 import ibevac.agent.knowledge.KnowledgeBase;
 import ibevac.agent.knowledge.environment.CompleteKnowledgeInverted;
 import ibevac.datatypes.RoomEdge;
+
 import java.util.Collection;
 import java.util.TreeMap;
 
 /**
  * <h4>A level 3 motion planner to work with the inverted Compelte Knowledge
  * Module. This would consider distance between logical waypoints as well.</h4>
- * 
  *
- *  @author     <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
- *  @version    $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
+ * @author <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
+ * @version $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
  */
 public class IbevacL3MP implements Level3MotionPlanning {
 
-    
+
     // TODO comment when fixed. 
     private IbevacSpace space = null;
     private IbevacAgent agent = null;
@@ -46,7 +46,7 @@ public class IbevacL3MP implements Level3MotionPlanning {
         this.agent = agent;
     }
 
- 
+
     @Override
     public List<LogicalWaypoint> getLogicalWaypoints() {
         if (agent.getCurrentGoalAreaIds().isEmpty()) {
@@ -94,8 +94,8 @@ public class IbevacL3MP implements Level3MotionPlanning {
         EscapePath escapePath = determineEscapePath(agent.getCurrentGoalAreaIds());
         assert (escapePath != null);
 
-        List<LogicalWaypoint> waypoints = escapePath.getLogicalWaypoints();
-        return waypoints;
+
+        return escapePath.getLogicalWaypoints();
     }
 
     private EscapePath determineEscapePath(Collection<Integer> goalAreaIds) {
@@ -111,7 +111,6 @@ public class IbevacL3MP implements Level3MotionPlanning {
         int goalArea = -1;
 
 
-
         for (Integer goalAreaId : goalAreaIds) {
             //is current area a room?
 //            System.out.println("here" + goalAreaId + "from" + currentAreaId);
@@ -121,8 +120,8 @@ public class IbevacL3MP implements Level3MotionPlanning {
 //                System.out.println("getLink");
                 KShortestPaths<Integer, RoomEdge> ksp =
                         new KShortestPaths<Integer, RoomEdge>(
-                        knowledge.getGraph(),
-                        currentAreaId, 1);
+                                knowledge.getGraph(),
+                                currentAreaId, 1);
 //                KShortestPaths<Integer, RoomEdge> ksp1 = new KShortestPaths<>(knowledge.getGraph(), roomId1, 1);
                 TreeMap<Double, GraphPath<Integer, RoomEdge>> paths = new TreeMap<Double, GraphPath<Integer, RoomEdge>>();
                 for (CLink connectingLink : knowledge.getConnectingLinks(goalAreaId)) {
@@ -221,12 +220,11 @@ public class IbevacL3MP implements Level3MotionPlanning {
             List<LogicalWaypoint> waypoints = new ArrayList<LogicalWaypoint>();
 
 
-
             if (singletonPath) {
 //                System.out.println("getLink =" + onlyLink.getId());
 //                System.out.println("agent area =" + agent.getCurrentAreaId());
 //                System.out.println("goal area =" + goalAreaId);
-                
+
                 IbevacLogicalWaypoint linkWaypoint = new IbevacLogicalWaypoint(
                         onlyLink,
                         knowledge.resolveAreaById(agent.getCurrentAreaId()),
@@ -236,10 +234,10 @@ public class IbevacL3MP implements Level3MotionPlanning {
                 if (goalAreaId != -1) {
                     IbevacLogicalWaypoint areaWaypoint =
                             (new IbevacLogicalWaypoint(
-                            null,
-                            knowledge.resolveAreaById(goalAreaId),
-                            null,
-                            space, agent)).setInitialWayPoint(linkWaypoint.getWP1());
+                                    null,
+                                    knowledge.resolveAreaById(goalAreaId),
+                                    null,
+                                    space, agent)).setInitialWayPoint(linkWaypoint.getWP1());
                     waypoints.add(areaWaypoint);
                 }
                 return waypoints;

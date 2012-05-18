@@ -4,28 +4,31 @@ package ibevac.agent.navigation.level1motion;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+
 import abmcs.agent.MovingAgent;
 import abmcs.agent.PhysicalAgent;
 import abmcs.motionplanning.level1.Level1MotionPlanning;
 import abmcs.motionplanning.level2.SpatialWaypoint;
 import ibevac.agent.IbevacAgent;
 import ibevac.engine.IbevacModel;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
+
 import utilities.Geometry;
 
 /**
- * <h4> A simpler implementation of RVO2 for Level1 motion planning. It does 
- * collision avoidance based on dynamic obstacles only. Static obstacles are 
+ * <h4> A simpler implementation of RVO2 for Level1 motion planning. It does
+ * collision avoidance based on dynamic obstacles only. Static obstacles are
  * not even considered. Collisions are still avoided because of the physics engine
  * below. However, the prefered velocity chosen might sometimes be very impractical
  * </h4>
  *
- *  @author     <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
- *  @version    $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
+ * @author <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
+ * @version $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
  */
 public class SimpleRVO2 extends Level1MotionPlanning {
 
@@ -35,7 +38,7 @@ public class SimpleRVO2 extends Level1MotionPlanning {
     /**
      * Stores the orcalines for calculation
      */
-    List<Line> orcaLines;
+    final List<Line> orcaLines;
     /**
      * TIME_HORIZON 	float (time) 	The minimal amount of time for which the
      * agent's velocities that are computed by the simulation are safe with
@@ -43,7 +46,7 @@ public class SimpleRVO2 extends Level1MotionPlanning {
      * will respond to the presence of other agents, but the less freedom the
      * agent has in choosing its velocities. Must be positive.
      */
-    public static double TIME_HORIZON = 2.0;
+    public static final double TIME_HORIZON = 2.0;
     public boolean goalReached = false;
 
     public SimpleRVO2(MovingAgent agent) {
@@ -56,7 +59,7 @@ public class SimpleRVO2 extends Level1MotionPlanning {
      */
     @Override
     public void reset() {
-        if(tracker!=null && tracker.reachedGoal()){
+        if (tracker != null && tracker.reachedGoal()) {
             this.goalReached = true;
         }
         tracker = null;
@@ -65,7 +68,8 @@ public class SimpleRVO2 extends Level1MotionPlanning {
 
     /**
      * Get's the current spatial waypoint the agent is trying to reach.
-     * @return 
+     *
+     * @return
      */
     @Override
     public SpatialWaypoint getCurrentSpatialWaypoint() {
@@ -73,27 +77,28 @@ public class SimpleRVO2 extends Level1MotionPlanning {
     }
 
     /**
-     * Uses RVO2 algorithm to calculate a velocity that will avoid collisions for 
-     * the next few time steps (based on specified parameters). This uses as input 
+     * Uses RVO2 algorithm to calculate a velocity that will avoid collisions for
+     * the next few time steps (based on specified parameters). This uses as input
      * the set of perceived dynamic obstacles and a current location
-     * (spatial waypoint) that the agent is trying to reach and it calculates 
+     * (spatial waypoint) that the agent is trying to reach and it calculates
      * the agent's preferred velocity.
+     *
      * @return Vector representation of preferred velocity
-     * @see WaypointTracker#WaypointTracker(abmcs.agent.MovingAgent) 
-     * @see WaypointTracker#getWaypoint() 
+     * @see WaypointTracker#WaypointTracker(abmcs.agent.MovingAgent, java.util.List)
+     * @see WaypointTracker#getWaypoint()
      */
     @Override
     public Vector2d getPreferredVelocity() {
         //determine our immediate waypoint
-        if(goalReached){
-            return new Vector2d(0,0);
+        if (goalReached) {
+            return new Vector2d(0, 0);
         }
-        if (tracker == null ) {
+        if (tracker == null) {
             List<SpatialWaypoint> waypoints = me.getLevel2MotionPlanning().getSpatialWaypoints();
             if (waypoints == null) {
-                return new Vector2d(0,0);
+                return new Vector2d(0, 0);
             } else {
-                tracker = new WaypointTracker(me, waypoints );
+                tracker = new WaypointTracker(me, waypoints);
             }
         }
 
@@ -101,9 +106,8 @@ public class SimpleRVO2 extends Level1MotionPlanning {
 
         if (waypoint == null) {
             this.reset();
-            return new Vector2d(0,0);
+            return new Vector2d(0, 0);
         }
-        
 
 
         Vector2d preferredVelocity = new Vector2d(waypoint.getPoint());
@@ -222,7 +226,6 @@ public class SimpleRVO2 extends Level1MotionPlanning {
                 u.scale((combinedRadius * invTimeStep) - wLength);
 
 
-
             }
             Vector2d newU = new Vector2d(u);
             if (otherAgent.getVelocity().length() != 0) {
@@ -235,7 +238,6 @@ public class SimpleRVO2 extends Level1MotionPlanning {
             line.point = new Point2d(newU);
             assert Math.abs(line.direction.length() - 1.0) < Geometry.EPSILON;
             orcaLines.add(line);
-
 
 
         }

@@ -9,6 +9,7 @@ import ibevac.agent.knowledge.waypoints.IbevacSpatialWaypoint;
 import ibevac.datatypes.CArea;
 import ibevac.engine.IbevacModel;
 import ibevac.environment.IbevacSpace;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,16 +17,17 @@ import java.util.List;
 import java.util.Set;
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
+
 import utilities.Geometry;
 
 /**
  * <h4> Given a list of logical waypoints this class calculates the next waypoint
- * that the agent should try to aim for. It basically determines the farthest 
+ * that the agent should try to aim for. It basically determines the farthest
  * visible waypoint.
  * </h4>
  *
- *  @author     <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
- *  @version    $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
+ * @author <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
+ * @version $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
  */
 public class WaypointTracker {
 
@@ -33,22 +35,22 @@ public class WaypointTracker {
     /**
      * The list of spatial waypoints available from the level 2 motion planning
      * system
-     * 
      */
-    private List<SpatialWaypoint> roadMap;
-//    private SpatialWaypoint current = null;
+    private final List<SpatialWaypoint> roadMap;
+    //    private SpatialWaypoint current = null;
     private final IbevacAgent agent;
     /**
-     * The Collection of Obstacle Line segments on each floor to determine 
+     * The Collection of Obstacle Line segments on each floor to determine
      * visibility of waypoints.
      */
-    private HashMap<Integer, Collection<LineSegment>> actualObstaclesByFloor;
-    private HashMap<Point2d, LineSegment> problemLineForPoint;
+    private final HashMap<Integer, Collection<LineSegment>> actualObstaclesByFloor;
+    private final HashMap<Point2d, LineSegment> problemLineForPoint;
 
     /**
      * Initializes an internal reference to the agent and gets the list of actual
      * obstacle line segments.
-     * @param agent 
+     *
+     * @param agent
      */
     public WaypointTracker(MovingAgent agent, List<SpatialWaypoint> wps) {
         this.agent = (IbevacAgent) agent;
@@ -63,11 +65,12 @@ public class WaypointTracker {
     }
 
     /**
-     * Get's the nearest visible waypoint. It first tries a more strict check 
-     * where the waypoint should be visible from both shoulder lines. Next it 
+     * Get's the nearest visible waypoint. It first tries a more strict check
+     * where the waypoint should be visible from both shoulder lines. Next it
      * tries a check where the point needs to be visible only from the center.
      * If still not possible it returns a null which causes teh agent to stay still.
-     * @return 
+     *
+     * @return
      */
     public SpatialWaypoint getWaypoint() {
 //        if(agent.getPosition().distance(roadMap.get(roadMap.size() - 1).getPoint())<agent.getDiameter()){
@@ -94,9 +97,9 @@ public class WaypointTracker {
         do {
             /**
              * numberOfTries = 1  : 1st try without calculating waypoints
-            
+
              * numberOfTries = 3  : weaker test with all points
-            
+
              */
             numberOfTries++;
 
@@ -152,10 +155,11 @@ public class WaypointTracker {
 
     /**
      * Calculates whether a goal point is visible form another position point
+     *
      * @param goal
      * @param position
      * @return true visible
-     *          false not visible
+     *         false not visible
      */
     private boolean visibleFrom(Point2d goal, Point2d position, int areaId0, int areaId1) {
         Point2d p1 = new Point2d(position.getX(), position.getY());
@@ -196,10 +200,11 @@ public class WaypointTracker {
 
     /**
      * Used to calc shoulder lines for StarPruning algorithm
+     *
      * @param position
      * @param velocity
      * @param radius
-     * @return 
+     * @return
      */
     static double[][] determineShoulderLines(double[] position, double[] velocity, double radius) {
         double len = Math.hypot(velocity[0], velocity[1]);

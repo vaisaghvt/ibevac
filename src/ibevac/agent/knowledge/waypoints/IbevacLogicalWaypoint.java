@@ -11,23 +11,22 @@ import ibevac.utilities.Utilities;
 import abmcs.motionplanning.level3.LogicalWaypoint;
 import ibevac.EvacConstants;
 import ibevac.utilities.IbevacRNG;
+
 import java.util.Collection;
 import javax.vecmath.Point2d;
 
 /**
  * <h4>An extension of LogicalWayPoint with more Ibevac specific knowledge
- * stored for each waypoint. This includes information on associated links and 
+ * stored for each waypoint. This includes information on associated links and
  * areas.</h4>
- * 
- * 
  *
- *  @author     <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
- *  @version    $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
+ * @author <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
+ * @version $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
  */
 public class IbevacLogicalWaypoint implements LogicalWaypoint {
 
     /**
-     * The getLink associated with this waypoint. 
+     * The getLink associated with this waypoint.
      * null for staircases and rooms.
      * non-null for links and exits
      */
@@ -38,38 +37,36 @@ public class IbevacLogicalWaypoint implements LogicalWaypoint {
      */
     private CArea area0 = null;
     /**
-     * The right or bottom area associated with this waypoint. 
+     * The right or bottom area associated with this waypoint.
      * Null only for a particular kind of exit
      */
     private CArea area1 = null;
     /**
-     * The first spatial waypoint associated with this logical waypoint. What it 
-     * stores depends on the type of logical way point. It is generally the 
+     * The first spatial waypoint associated with this logical waypoint. What it
+     * stores depends on the type of logical way point. It is generally the
      * entering spatial waypoint
-     * 
      */
     private IbevacSpatialWaypoint wp0 = null;
     /**
-     * The first spatial waypoint associated with this logical waypoint. What it 
-     * stores depends on the type of logical way point. It is generally the 
+     * The first spatial waypoint associated with this logical waypoint. What it
+     * stores depends on the type of logical way point. It is generally the
      * exitting spatial waypoint
-     * 
      */
     private IbevacSpatialWaypoint wp1 = null;
     /**
      * A reference to space
      */
-    private IbevacSpace space;
+    private final IbevacSpace space;
 
     /**
-     * Redirects to the appropriate function to create the logical waypoint based 
+     * Redirects to the appropriate function to create the logical waypoint based
      * on the parameters passed.
-     * 
-     * @param getLink
+     *
+     * @param link
      * @param area0
      * @param area1
      * @param space
-     * @param agent 
+     * @param agent
      */
     public IbevacLogicalWaypoint(CLink link, CArea area0, CArea area1, IbevacSpace space, IbevacAgent agent) {
         this.link = link;
@@ -98,15 +95,15 @@ public class IbevacLogicalWaypoint implements LogicalWaypoint {
 
     /**
      * Create a logical waypoint for this getLink. Each spatial waypoint is initially
-     * set on the intersection of the getLink with each of the associated areas. 
-     * Following this the links are moved a certain distance outward to help in 
+     * set on the intersection of the getLink with each of the associated areas.
+     * Following this the links are moved a certain distance outward to help in
      * easier and better path planning.
-     * 
-     * @param getLink
+     *
+     * @param link
      * @param area0
      * @param area1
      * @param space
-     * @param agent 
+     * @param agent
      */
     private void processLink(CLink link, CArea area0, CArea area1, IbevacSpace space, IbevacAgent agent) {
         this.area0 = area0;
@@ -205,13 +202,14 @@ public class IbevacLogicalWaypoint implements LogicalWaypoint {
     }
 
     /**
-     * Creates a logical waypoint that is associated with an exit. The first 
-     * waypoint is at the intesection of the side of the getLink with the connected 
-     * area. The second waypoint is at the center of the getLink. 
-     * @param getLink
+     * Creates a logical waypoint that is associated with an exit. The first
+     * waypoint is at the intesection of the side of the getLink with the connected
+     * area. The second waypoint is at the center of the getLink.
+     *
+     * @param link
      * @param area
      * @param space
-     * @param agent 
+     * @param agent
      */
     private void processExit(CLink link, CArea area, IbevacSpace space, IbevacAgent agent) {
         assert (link instanceof CExit);
@@ -262,10 +260,11 @@ public class IbevacLogicalWaypoint implements LogicalWaypoint {
     /**
      * The logical waypoint for a staircase. It has two associated areas and the
      * spatial waypoints are the midpoints of these two areas.
+     *
      * @param area0
      * @param area1
      * @param space
-     * @param agent 
+     * @param agent
      */
     private void processStaircase(CArea area0, CArea area1, IbevacSpace space, IbevacAgent agent) {
         this.area0 = area0;
@@ -298,13 +297,13 @@ public class IbevacLogicalWaypoint implements LogicalWaypoint {
 
     /**
      * The logical waypoint associated with an area. Both waypoints are set to
-     * the center of the room. This is generally used in conjunction with 
+     * the center of the room. This is generally used in conjunction with
      * the setInitialWayPoint(SpatialWaypoint lastPoint)
+     *
      * @param area
      * @param space
      * @param agent
-     * 
-     * @see IbevacLogicalWaypoint#setInitialWayPoint(abmcs.motionplanning.level2.SpatialWaypoint) 
+     * @see IbevacLogicalWaypoint#setInitialWayPoint(abmcs.motionplanning.level2.SpatialWaypoint)
      */
     private void processArea(CArea area, IbevacSpace space, IbevacAgent agent) {
 
@@ -331,11 +330,12 @@ public class IbevacLogicalWaypoint implements LogicalWaypoint {
     }
 
     /**
-     * Sets the initial waypoint of this area. The initial waypoint is set such 
-     * that there is an intermediate stopping point after the previous spatial 
+     * Sets the initial waypoint of this area. The initial waypoint is set such
+     * that there is an intermediate stopping point after the previous spatial
      * waypoint and before this area's central spatial waypoint.
-     * 
+     * <p/>
      * Only to be used for area logical waypoints
+     *
      * @param lastPoint
      * @return modified logical waypoint so that this can be chained.
      */

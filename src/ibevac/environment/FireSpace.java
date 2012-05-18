@@ -24,11 +24,9 @@ import sim.field.grid.ObjectGrid2D;
 
 /**
  * This class is responsible for handling fire.
- * 
- * 
- * 
- *  @author     <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
- *  @version    $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
+ *
+ * @author <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
+ * @version $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
  */
 public final class FireSpace implements Steppable {
 
@@ -60,10 +58,10 @@ public final class FireSpace implements Steppable {
     /**
      * The fields of ObjectGrids which are used for protraying the fire.
      */
-    private ArrayList<ObjectGrid2D> fireSpaces;
+    private final ArrayList<ObjectGrid2D> fireSpaces;
     // private double pkill = 0.0001;
     /**
-     * The 3D array of cells for fire. First index is the floor, second the width 
+     * The 3D array of cells for fire. First index is the floor, second the width
      * and third the height
      */
     private Cell[][][] cells = null;
@@ -76,23 +74,24 @@ public final class FireSpace implements Steppable {
      */
     private HashSet<Cell> firefront = new HashSet<Cell>();
     /**
-     *  To keep a track of small rooms that on fire to increase the effectiveness 
+     * To keep a track of small rooms that on fire to increase the effectiveness
      * of fire cue usage.
      */
-    private HashSet<SmallRoom> smallRoomsOnFire = new HashSet<SmallRoom>();
-    private IbevacSpace space;
+    private final HashSet<SmallRoom> smallRoomsOnFire = new HashSet<SmallRoom>();
+    private final IbevacSpace space;
 
     /**
      * Sets up the environment for fire propagation and sets things in motion by
-     * starting the initial fire from paramaters passed to it. Gives instructions 
+     * starting the initial fire from paramaters passed to it. Gives instructions
      * to start the fire alarm as well.
+     *
      * @param scenario
-     * @param resolution 
+     * @param resolution
      * @param smokeSpace
-     * @param space 
+     * @param space
      */
     public FireSpace(CEvacuationScenario scenario, int resolution,
-            SmokeSpace smokeSpace, IbevacSpace space) {
+                     SmokeSpace smokeSpace, IbevacSpace space) {
         this.resolution = resolution;
         this.space = space;
         this.smokeSpace = smokeSpace;
@@ -123,10 +122,10 @@ public final class FireSpace implements Steppable {
                 }
             }
         }
-        for (int i = 0; i < cells.length; ++i) {
-            for (int j = 0; j < cells[i].length; ++j) {
-                for (int k = 0; k < cells[i][j].length; ++k) {
-                    cells[i][j][k].initializeNeighbours();
+        for (Cell[][] cell1 : cells) {
+            for (int j = 0; j < cell1.length; ++j) {
+                for (int k = 0; k < cell1[j].length; ++k) {
+                    cell1[j][k].initializeNeighbours();
                 }
             }
         }
@@ -214,9 +213,10 @@ public final class FireSpace implements Steppable {
 
     /**
      * Schedule the fire for the appropriate time
+     *
      * @param model
      * @param ordering
-     * @param timestep 
+     * @param timestep
      */
     public void schedule(IbevacModel model, int ordering, double timestep) {
         this.stoppable = model.schedule.scheduleRepeating(this, ordering,
@@ -224,10 +224,11 @@ public final class FireSpace implements Steppable {
     }
 
     /**
-     * The step() in which first the burnable cellsa re set to burning with a 
-     * given probablitiy. Then smoek generators are created. The burning cells 
+     * The step() in which first the burnable cellsa re set to burning with a
+     * given probablitiy. Then smoek generators are created. The burning cells
      * are then actually ignited and the location of the fire front is changed.
-     * @param state 
+     *
+     * @param state
      */
     @Override
     public void step(SimState state) {
@@ -247,7 +248,7 @@ public final class FireSpace implements Steppable {
                     p = n.bcount * PROBABILITY_OF_SMOKE_GENERATION;
 
                     if (IbevacRNG.instance().nextDouble() < p) {
-                        smokeSpace.addGenerator(n.i*resolution, n.j*resolution, n.k*resolution);
+                        smokeSpace.addGenerator(n.i * resolution, n.j * resolution, n.k * resolution);
 //                    System.out.println("generating");
                     }//else{
 //                    System.out.println("not yet");
@@ -278,12 +279,13 @@ public final class FireSpace implements Steppable {
     }
 
     /**
-     * Determines the lethality of the region by determining whether the cell in 
+     * Determines the lethality of the region by determining whether the cell in
      * that location is burning ordestroyed.
+     *
      * @param floorIdx
      * @param x
      * @param y
-     * @return 
+     * @return
      */
     public boolean isAreaLethal(int floorIdx, int x, int y) {
         int i = 2 * floorIdx;
@@ -316,8 +318,8 @@ public final class FireSpace implements Steppable {
 
             space.putCueInArea(
                     new FireAlarmCue(
-                    (area.getCorner0().getX() + area.getCorner1().getX()) / 2,
-                    (area.getCorner0().getY() + area.getCorner1().getY()) / 2),
+                            (area.getCorner0().getX() + area.getCorner1().getX()) / 2,
+                            (area.getCorner0().getY() + area.getCorner1().getY()) / 2),
                     area.getId());
         }
         fireAlarmRunning = true;
@@ -338,9 +340,9 @@ public final class FireSpace implements Steppable {
         fireAlarmRunning = false;
     }
 
-   
+
     /**
-     * The cells which are the actual building blocks of the fire simulation 
+     * The cells which are the actual building blocks of the fire simulation
      * cellular automata.
      */
     private class Cell {
@@ -348,7 +350,7 @@ public final class FireSpace implements Steppable {
         private int i = -1;
         private int j = -1;
         private int k = -1;
-        
+
         /**
          * Number of neighbours that are burning
          */
@@ -365,7 +367,7 @@ public final class FireSpace implements Steppable {
             }
         }
 
-        public void initializeNeighbours(){
+        public void initializeNeighbours() {
             neighbors = new HashSet<Cell>();
 
             if (j > 0) {
@@ -450,9 +452,9 @@ public final class FireSpace implements Steppable {
             }
 
         }
-        
-        /** 
-         * Change the cells state to burning if it is burnable and create 
+
+        /**
+         * Change the cells state to burning if it is burnable and create
          * appropriate cues
          */
         public void ignite() {
@@ -485,7 +487,7 @@ public final class FireSpace implements Steppable {
          * return false; }
          */
         public Set<Cell> neighbors() {
-            
+
             return neighbors;
         }
 
@@ -496,32 +498,33 @@ public final class FireSpace implements Steppable {
             }
         }
     }
+
     /**
      * Enum value indicating the state of the cell and the color to be used to
      * display it.
      */
-     public enum CellState {
+    public enum CellState {
 
-         /**
-          * This is the default initial state of every cell. In this state it 
-          * cannot be burned
-          */
+        /**
+         * This is the default initial state of every cell. In this state it
+         * cannot be burned
+         */
         EMPTY(new Color(0, 0, 0, 0)),
         /**
          * The state of being burnable but having still not started burning
          */
         UNBURNED(new Color(0, 0, 0, 0)),
         /**
-         * The state of burning. In this state there are three colours between 
+         * The state of burning. In this state there are three colours between
          * which the cells alternate
          */
         BURNING(Color.red, Color.orange, Color.yellow),
         /**
-         * A state in which the cell has been burnt completely to the point of 
+         * A state in which the cell has been burnt completely to the point of
          * destruction. Not sure at what stage a cell becomes destroyed
          */
         DESTROYED(new Color(0, 0, 0, 0));
-        private ArrayList<Color> possibleColors;
+        private final ArrayList<Color> possibleColors;
 
         CellState(Color... colors) {
             this.possibleColors = new ArrayList<Color>();
@@ -531,5 +534,5 @@ public final class FireSpace implements Steppable {
         public ArrayList<Color> getColorList() {
             return possibleColors;
         }
-    };
+    }
 }

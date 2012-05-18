@@ -8,17 +8,15 @@ import javax.vecmath.Point2d;
 
 /**
  * Fire Alarm
- * 
- * 
- * 
- *  @author     <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
- *  @version    $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
+ *
+ * @author <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
+ * @version $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
  */
 public class FireAlarmCue implements Cue {
 
     final Point2d location;
     public static Ambiguity ambiguityLevel = Ambiguity.TEN;
-    
+
     public FireAlarmCue(int x, int y) {
         this.location = new Point2d(x, y);
     }
@@ -35,20 +33,17 @@ public class FireAlarmCue implements Cue {
 
     @Override
     public Ambiguity ambiguityLevel() {
-       return ambiguityLevel;
+        return ambiguityLevel;
     }
 
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
-        }if (getClass() != obj.getClass()) {
-            return false;
         }
-        return true;
+        return getClass() == obj.getClass();
     }
 
     public int hashCode() {
-        int hash = 7;
-        return hash;
+        return 7;
     }
 }

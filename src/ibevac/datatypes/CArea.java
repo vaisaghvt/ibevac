@@ -19,9 +19,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for CArea complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="CArea">
  *   &lt;complexContent>
@@ -34,23 +34,20 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CArea", propOrder = {
-    "corner0",
-    "corner1"
+        "corner0",
+        "corner1"
 })
 @XmlSeeAlso({
-    CRoom.class,
-    CFire.class,
-    CLink.class,
-    CCrowd.class
+        CRoom.class,
+        CFire.class,
+        CLink.class,
+        CCrowd.class
 })
 public class CArea
-    extends CObject
-{
+        extends CObject {
 
     @XmlElement(required = true)
     protected CPoint corner0;
@@ -59,11 +56,9 @@ public class CArea
 
     /**
      * Gets the value of the corner0 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CPoint }
-     *     
+     *
+     * @return possible object is
+     *         {@link CPoint }
      */
     public CPoint getCorner0() {
         return corner0;
@@ -71,11 +66,9 @@ public class CArea
 
     /**
      * Sets the value of the corner0 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CPoint }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link CPoint }
      */
     public void setCorner0(CPoint value) {
         this.corner0 = value;
@@ -83,11 +76,9 @@ public class CArea
 
     /**
      * Gets the value of the corner1 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CPoint }
-     *     
+     *
+     * @return possible object is
+     *         {@link CPoint }
      */
     public CPoint getCorner1() {
         return corner1;
@@ -95,11 +86,9 @@ public class CArea
 
     /**
      * Sets the value of the corner1 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CPoint }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link CPoint }
      */
     public void setCorner1(CPoint value) {
         this.corner1 = value;
@@ -114,13 +103,10 @@ public class CArea
             return false;
         }
         final CArea other = (CArea) obj;
-        if(!other.corner0.equals(this.corner0)){
+        if (!other.corner0.equals(this.corner0)) {
             return false;
         }
-        if(!other.corner1.equals(this.corner1)){
-            return false;
-        }
-        return true;
+        return other.corner1.equals(this.corner1);
     }
 
     @Override
@@ -132,8 +118,8 @@ public class CArea
     }
 
     public Point2d getCenter() {
-         return new Point2d(
-                (this.corner0.x + this.corner1.x) / 2.0, 
+        return new Point2d(
+                (this.corner0.x + this.corner1.x) / 2.0,
                 (this.corner0.y + this.corner1.y) / 2.0);
     }
 

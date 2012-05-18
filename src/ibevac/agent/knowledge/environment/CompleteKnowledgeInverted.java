@@ -13,6 +13,7 @@ import ibevac.datatypes.CStaircase;
 
 import ibevac.datatypes.CStaircaseGroup;
 import ibevac.environment.IbevacSpace;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,65 +22,64 @@ import java.util.Set;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
 /**
- * <h4>This implementation of the Environment Knowledge Module initializes the agent 
- * with knowledge of the complete map stored in scenario. There are two points 
- * of difference from CompleteKnowledge : Firstly, the edges are areas and the 
- * vertices are links. Secondly, the distance to be  traversed in moving over an 
+ * <h4>This implementation of the Environment Knowledge Module initializes the agent
+ * with knowledge of the complete map stored in scenario. There are two points
+ * of difference from CompleteKnowledge : Firstly, the edges are areas and the
+ * vertices are links. Secondly, the distance to be  traversed in moving over an
  * edge is stored. This implies that path's found will be slightly smarter. </h4>
- * 
- * 
- *  @author     <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
- *  @version    $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
+ *
+ * @author <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
+ * @version $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
  */
 public class CompleteKnowledgeInverted implements EnvironmentKnowledgeModule {
 
     //TODO  Very buggy Either rethink the whole class or do soemthing at least.
-    
-    
+
+
     /**
-     * Simple weighted graph storing the agent's internal representation of the 
-     * known environment. Edges correspond to rooms and have an integer weight 
+     * Simple weighted graph storing the agent's internal representation of the
+     * known environment. Edges correspond to rooms and have an integer weight
      * associated with it indicating the distance required to move along the edge.
-     * 
      */
-    private SimpleWeightedGraph<Integer, RoomEdge> graph = new SimpleWeightedGraph<Integer, RoomEdge>(
+    private final SimpleWeightedGraph<Integer, RoomEdge> graph = new SimpleWeightedGraph<Integer, RoomEdge>(
             RoomEdge.class);
     /**
      * A mapping associating area Ids with actual areas/rooms
      */
-    private HashMap<Integer, CArea> roomMapping = new HashMap<Integer, CArea>();
+    private final HashMap<Integer, CArea> roomMapping = new HashMap<Integer, CArea>();
     /**
-     * A mapping associating a link with integerID. A link connects to areas or 
+     * A mapping associating a link with integerID. A link connects to areas or
      * rooms
      */
-    private HashMap<Integer, CLink> linkMapping = new HashMap<Integer, CLink>();
+    private final HashMap<Integer, CLink> linkMapping = new HashMap<Integer, CLink>();
     /**
      * The set of inaccessible logical waypoints.
      */
-    private HashSet<IbevacLogicalWaypoint> inaccessibleWaypoints = new HashSet<IbevacLogicalWaypoint>();
+    private final HashSet<IbevacLogicalWaypoint> inaccessibleWaypoints = new HashSet<IbevacLogicalWaypoint>();
     /**
-     * The area Ids of those rooms which are meeting points. All corridors are 
+     * The area Ids of those rooms which are meeting points. All corridors are
      * set to be meeting points.
      */
-    private HashSet<Integer> corridorList = new HashSet<Integer>();
-    
+    private final HashSet<Integer> corridorList = new HashSet<Integer>();
+
     /**
-     * The incoming and outgoing links (doorways) for each room or area. 
+     * The incoming and outgoing links (doorways) for each room or area.
      */
-    private HashMultimap<Integer, CLink> linksFromRoom = HashMultimap.create();
+    private final HashMultimap<Integer, CLink> linksFromRoom = HashMultimap.create();
 
     //TODO Think about this in particular
+
     /**
      * Initializes internal graph representation and all the mappings.
-     * 
-     * @param scenario  
-     * @param space     Required to find links for each room.
+     *
+     * @param scenario
+     * @param space    Required to find links for each room.
      */
     public CompleteKnowledgeInverted(CEvacuationScenario scenario, IbevacSpace space) {
         for (CFloor floor : scenario.getFloors()) {
 
 //            //create environment vertex
-           
+
             //create links as vertices
             for (CLink link : floor.getLinks()) {
 //                int id0 = link.getConnectingAreas().get(0);
@@ -128,9 +128,9 @@ public class CompleteKnowledgeInverted implements EnvironmentKnowledgeModule {
                 this.linksFromRoom.putAll(room.getId(), links);
                 for (CLink link1 : links) {
                     for (CLink link2 : links) {
-                       
+
                         if (link1.getId() != link2.getId()) {
-                    
+
                             graph.addEdge(link1.getId(), link2.getId(), new RoomEdge(room, link1, link2));
 //                            System.out.println(graph.edgeSet());
                         }
@@ -170,7 +170,7 @@ public class CompleteKnowledgeInverted implements EnvironmentKnowledgeModule {
                     CLink outgoingLink = links.get(0);
                     RoomEdge edge = new RoomEdge(roomMapping.get(id0), roomMapping.get(id1), incomingLink, outgoingLink);
                     graph.addEdge(incomingLink.getId(), outgoingLink.getId(), edge);
-                    
+
 //					allEdges.add(edge);
                 }
             }
@@ -228,11 +228,12 @@ public class CompleteKnowledgeInverted implements EnvironmentKnowledgeModule {
 
     /**
      * A list of connecting links for each room.
+     *
      * @param areaId
      * @return Iterable over the links which can be directly iterated over.
      */
     public Iterable<CLink> getConnectingLinks(int areaId) {
-     
+
         return linksFromRoom.get(areaId);
     }
 }

@@ -1,7 +1,6 @@
 package ibevac.agent.navigation.level1motion;
 
 
-
 import java.util.List;
 import java.util.Set;
 
@@ -9,15 +8,17 @@ import abmcs.agent.MovingAgent;
 import abmcs.agent.StaticObstacle;
 import abmcs.motionplanning.level1.Level1MotionPlanning;
 import abmcs.motionplanning.level2.SpatialWaypoint;
+
 import javax.vecmath.Vector2d;
+
 import utilities.Geometry;
 
 /**
  * <h4> A kinetic energy based level 1 motion planner which does collision avoidance.
  * It avoids both static and dynamic obstacles </h4>
  *
- *  @author     <A HREF="mailto:heiko.aydt@tum-create.edu.sg">Heiko</A>
- *  @version    $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
+ * @author <A HREF="mailto:heiko.aydt@tum-create.edu.sg">Heiko</A>
+ * @version $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
  */
 public class L1MPStarPruning extends Level1MotionPlanning {
 
@@ -142,10 +143,10 @@ public class L1MPStarPruning extends Level1MotionPlanning {
                 for (StaticObstacle o : sobstacles) {
 //					if(doLinesegmentsIntersect(lines[1], o.line) || doLinesegmentsIntersect(lines[2], o.line)) {
                     double[] lineSegmentAsArray = new double[]{
-                        o.getLine().getStart().getX(),
-                        o.getLine().getStart().getY(),
-                        o.getLine().getEnd().getX(),
-                        o.getLine().getEnd().getY()};
+                            o.getLine().getStart().getX(),
+                            o.getLine().getStart().getY(),
+                            o.getLine().getEnd().getX(),
+                            o.getLine().getEnd().getY()};
                     if (Geometry.doLinesegmentsIntersect(tempLines[1], lineSegmentAsArray)
                             && Geometry.doLinesegmentsIntersect(tempLines[2], lineSegmentAsArray)) {
 //					if(doLinesegmentsIntersect(line0, o.line) || doLinesegmentsIntersect(line1, o.line) || doLinesegmentsIntersect(line2, o.line)) {
@@ -168,15 +169,15 @@ public class L1MPStarPruning extends Level1MotionPlanning {
         double dbest = Double.MAX_VALUE;
         double[] vbest = null;
 
-        for (int i = 0; i < vectors.length; ++i) {
-            if (vectors[i] != null) {
-                double dx = Math.abs(position[0] + vectors[i][0] - destination[0]);
-                double dy = Math.abs(position[1] + vectors[i][1] - destination[1]);
+        for (double[] vector : vectors) {
+            if (vector != null) {
+                double dx = Math.abs(position[0] + vector[0] - destination[0]);
+                double dy = Math.abs(position[1] + vector[1] - destination[1]);
                 double d = Math.hypot(dx, dy);
 //				double d = dx + dy;
                 if (d < dbest) {
                     dbest = d;
-                    vbest = vectors[i];
+                    vbest = vector;
                 }
             }
         }
@@ -194,6 +195,5 @@ public class L1MPStarPruning extends Level1MotionPlanning {
         return new double[]{x, y};
     }
 
-    
-   
+
 }

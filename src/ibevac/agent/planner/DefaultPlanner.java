@@ -10,16 +10,16 @@ import ibevac.agent.knowledge.environment.EnvironmentKnowledgeModule;
 
 import ibevac.agent.knowledge.event.PhaseBucket.Phase;
 import ibevac.agent.navigation.level1motion.SimpleRVO2;
+
 import java.util.Collection;
 import javax.vecmath.Point2d;
 
 /**
  * <h4>The default planning module where the agents show default kinds of behavior only.
  * </h4>
- * 
- * 
- *  @author     <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
- *  @version    $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
+ *
+ * @author <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
+ * @version $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
  */
 public class DefaultPlanner implements Planner {
 
@@ -29,13 +29,13 @@ public class DefaultPlanner implements Planner {
 //        DEFAULT, INVESTIGATING, ESCAPING, SAFE, TRAPPED, DEAD
 //    };
     private State state;
-    private EventKnowledgeModule eventKnowledge;
-    private EnvironmentKnowledgeModule environmentKnowledge;
-    private IbevacAgent agent;
+    private final EventKnowledgeModule eventKnowledge;
+    private final EnvironmentKnowledgeModule environmentKnowledge;
+    private final IbevacAgent agent;
     private Point2d currentGoal;
 
     public DefaultPlanner(IbevacAgent agent, EventKnowledgeModule eventKnowledge,
-            EnvironmentKnowledgeModule environmentKnowledge) {
+                          EnvironmentKnowledgeModule environmentKnowledge) {
 //		this.eventKnowledge = eventKnowledge;
         this.environmentKnowledge = environmentKnowledge;
         this.eventKnowledge = eventKnowledge;
@@ -83,10 +83,10 @@ public class DefaultPlanner implements Planner {
         State previousState = this.state;
         setState(state.handlePhaseChange(phase));
         State newState = this.state;
-        if(!previousState.getClass().equals(newState.getClass())){
+        if (!previousState.getClass().equals(newState.getClass())) {
             this.agent.getLevel1MotionPlanning().reset();
-            ((SimpleRVO2)(agent.getLevel1MotionPlanning())).goalReached = false;
-             
+            ((SimpleRVO2) (agent.getLevel1MotionPlanning())).goalReached = false;
+
         }
     }
 
@@ -103,7 +103,7 @@ public class DefaultPlanner implements Planner {
     @Override
     public void setState(State state) {
         this.state = state;
-       
+
 
     }
 

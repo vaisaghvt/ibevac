@@ -24,33 +24,31 @@ import sim.util.Double2D;
 
 /**
  * This class is responsible for handling and storing agents.
- * 
- * 
- * 
- *  @author     <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
- *  @version    $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
+ *
+ * @author <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
+ * @version $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
  */
-public class AgentSpace {
+class AgentSpace {
 
     /**
-     * The continuous2D field with two purposes. It can be used to check for 
-     * nearby agents. More importantly it is used by portrayals to draw agents at 
+     * The continuous2D field with two purposes. It can be used to check for
+     * nearby agents. More importantly it is used by portrayals to draw agents at
      * the appropriate locations
      */
-    private ArrayList<Continuous2D> agentSpaces;
+    private final ArrayList<Continuous2D> agentSpaces;
     /**
      * The grid size in continuous2D field. The right choice of this value ensures
      * that sensing of neighbours is done more efficiently and faster.
      */
-    private double gridSize;
+    private final double gridSize;
     /**
      * As the name suggests it gives the set of all agents in each area ID
      */
-    private Map<Integer, Set<IbevacAgent>> agentsByAreaId;
+    private final Map<Integer, Set<IbevacAgent>> agentsByAreaId;
     /**
      * The set of all agents in each floor
      */
-    private Map<Integer, Set<IbevacAgent>> agentsByFloor;
+    private final Map<Integer, Set<IbevacAgent>> agentsByFloor;
     /**
      * A reference to the RealWorldLayout
      */
@@ -59,18 +57,18 @@ public class AgentSpace {
      * Divides each larger room to smaller Rooms.  And gives the set of agents
      * in each small room. Helps in more efficient neighbour finding behavior
      */
-    private HashMultimap<SmallRoom, IbevacAgent> agentsForSmallRoom;
+    private final HashMultimap<SmallRoom, IbevacAgent> agentsForSmallRoom;
     /**
      * A mapping of the small rooms for each area.
      */
-    private HashMultimap<Integer, SmallRoom> smallRoomsForArea;
+    private final HashMultimap<Integer, SmallRoom> smallRoomsForArea;
     /**
      * The fields in which the small ROoms are stored so that neighbour checks
      * can be easily done to find nearby rooms.
      */
-    private ArrayList<Continuous2D> smallRoomSpaces;
+    private final ArrayList<Continuous2D> smallRoomSpaces;
     /**
-     * A parameter that determines the size of hte samll room. Which in turn 
+     * A parameter that determines the size of hte samll room. Which in turn
      * determines what size of rooms are broken down into smaller rooms.
      */
     private final double roomSize;
@@ -94,8 +92,9 @@ public class AgentSpace {
 
     /**
      * Initializes the agent and the small room spaces.
+     *
      * @param width
-     * @param height 
+     * @param height
      */
     public void addSpace(int width, int height) {
         agentSpaces.add(new Continuous2D(
@@ -121,14 +120,14 @@ public class AgentSpace {
                 //Room size is within limits
                 double locationX = mnx + ((double) roomWidth / 2.0);
                 double locationY = mny + ((double) roomLength / 2.0);
-                SmallRoom tempRoom = new SmallRoom(roomLength, roomWidth, 
+                SmallRoom tempRoom = new SmallRoom(roomLength, roomWidth,
                         new Point2d(locationX, locationY),
-                        area,realWorld.getFloorByAreaId(area.getId()));
+                        area, realWorld.getFloorByAreaId(area.getId()));
                 this.smallRoomsForArea.put(area.getId(), tempRoom);
                 smallRoomSpaces.get(realWorld.getFloorByAreaId(area.getId())).
                         setObjectLocation(tempRoom,
-                        new Double2D(locationX / IbevacModel.scale,
-                        locationY / IbevacModel.scale));
+                                new Double2D(locationX / IbevacModel.scale,
+                                        locationY / IbevacModel.scale));
             } else {
                 int idealNumberOfRoomsOnLength = 1;
                 int idealNumberOfRoomsOnWidth = 1;
@@ -145,16 +144,16 @@ public class AgentSpace {
 //                System.out.println(area.getId() + ":" + idealNumberOfRoomsOnLength + "," + idealNumberOfRoomsOnWidth);
                 for (int i = 0; i < idealNumberOfRoomsOnWidth; i++) {
                     for (int j = 0; j < idealNumberOfRoomsOnLength; j++) {
-                        double locationX = mnx + i * idealWidth + ((double) idealWidth / 2.0);
-                        double locationY = mny + j * idealLength + ((double) idealLength / 2.0);
-                        SmallRoom tempRoom = new SmallRoom(idealLength, idealWidth, 
-                                new Point2d(locationX, locationY), 
-                                area,realWorld.getFloorByAreaId(area.getId()) );
+                        double locationX = mnx + i * idealWidth + (idealWidth / 2.0);
+                        double locationY = mny + j * idealLength + (idealLength / 2.0);
+                        SmallRoom tempRoom = new SmallRoom(idealLength, idealWidth,
+                                new Point2d(locationX, locationY),
+                                area, realWorld.getFloorByAreaId(area.getId()));
                         this.smallRoomsForArea.put(area.getId(), tempRoom);
                         smallRoomSpaces.get(realWorld.getFloorByAreaId(area.getId())).
                                 setObjectLocation(tempRoom,
-                                new Double2D(locationX / IbevacModel.scale,
-                                locationY / IbevacModel.scale));
+                                        new Double2D(locationX / IbevacModel.scale,
+                                                locationY / IbevacModel.scale));
                     }
                 }
             }
@@ -174,7 +173,8 @@ public class AgentSpace {
 
     /**
      * Adds a new agent to the environment
-     * @param agent 
+     *
+     * @param agent
      */
     public void addNewAgent(IbevacAgent agent) {
 
@@ -216,16 +216,17 @@ public class AgentSpace {
     /**
      * Determine a random valid location for an agent within the bounds passed to
      * the function.
+     *
      * @param mnx
      * @param mny
      * @param mxx
      * @param mxy
      * @param size
      * @param floorIndex
-     * @return 
+     * @return
      */
     public Point2d findValidPointForAgent(int mnx, int mny, int mxx, int mxy,
-            double size, int floorIndex) {
+                                          double size, int floorIndex) {
 
         Point2d pos = null;
         IbevacRNG random = IbevacRNG.instance();
@@ -255,9 +256,10 @@ public class AgentSpace {
 
     /**
      * Updates the agents logical location by updating the agents floor.
+     *
      * @param agent
      * @param fcurrent
-     * @param fnext 
+     * @param fnext
      */
     public void moveAgentFloor(IbevacAgent agent, int fcurrent, int fnext) {
         Set<IbevacAgent> fromAgents = agentsByFloor.get(fcurrent);
@@ -275,9 +277,10 @@ public class AgentSpace {
 
     /**
      * Updates the agents logical location by updating the agents area.
+     *
      * @param agent
-     * @param fcurrent
-     * @param fnext 
+     * @param fromAreaId
+     * @param toAreaId
      */
     public void moveAgentArea(IbevacAgent agent, int fromAreaId, int toAreaId) {
 
@@ -300,14 +303,15 @@ public class AgentSpace {
                 agent);
         fromAgents.remove(agent);
         toAgents.add(agent);
-        
+
 //        PEDDataTracker.instance.addAgentNewAreaId(agent.getId(), toAreaId);
 
     }
 
     /**
      * Removes an agent from the environment
-     * @param agent 
+     *
+     * @param agent
      */
     public void removeAgent(IbevacAgent agent) {
         int floorIdx = agent.getCurrentFloorId();
@@ -337,7 +341,8 @@ public class AgentSpace {
     /**
      * Updates an agent's physical location on the map in the two fields.
      * For portrayal and for perception
-     * @param agent 
+     *
+     * @param agent
      */
     public void updateAgentPosition(IbevacAgent agent) {
         if (!agent.isSafe()) {
@@ -355,10 +360,11 @@ public class AgentSpace {
 
     /**
      * Determines the small room associated with a particular xy location.
+     *
      * @param x
      * @param y
      * @param areaId
-     * @return 
+     * @return
      */
     SmallRoom determineSmallRoomOfLocation(int x, int y, int areaId) {
 
@@ -381,19 +387,21 @@ public class AgentSpace {
 //                me.getLogicalPosition().getY() / IbevacModel.scale),
 //                radius);
 //    }
+
     /**
      * Returns the agents within a particular radius of a specified location. For
      * efficiency 's sake this is done through the small rooms.
+     *
      * @param me
      * @param radius
-     * @return 
+     * @return
      */
     public Collection<IbevacAgent> getAgentsInRadius(IbevacAgent me, double radius) {
 
         Bag smallRooms = this.smallRoomSpaces.get(me.getCurrentFloorId()).getObjectsExactlyWithinDistance(
                 new Double2D(
-                me.getLogicalPosition().getX() / IbevacModel.scale,
-                me.getLogicalPosition().getY() / IbevacModel.scale),
+                        me.getLogicalPosition().getX() / IbevacModel.scale,
+                        me.getLogicalPosition().getY() / IbevacModel.scale),
                 radius);
         HashSet<IbevacAgent> agentsToReturn = new HashSet<IbevacAgent>();
         for (Object object : smallRooms) {
@@ -405,8 +413,9 @@ public class AgentSpace {
 
     /**
      * Set of agents ocuppying a particular area/room
+     *
      * @param areaId
-     * @return 
+     * @return
      */
     public Set<IbevacAgent> getAgentsByAreaId(int areaId) {
         return agentsByAreaId.get(areaId);
@@ -414,8 +423,9 @@ public class AgentSpace {
 
     /**
      * Get's the agent field for a particular floor
+     *
      * @param floor
-     * @return 
+     * @return
      */
     public Continuous2D getAgentField(int floor) {
         return agentSpaces.get(floor);
@@ -423,8 +433,9 @@ public class AgentSpace {
 
     /**
      * Gets all the agents in a particular floor.
+     *
      * @param floor
-     * @return 
+     * @return
      */
     public Set<IbevacAgent> getAgentsByFloor(int floor) {
         return agentsByFloor.get(floor);
@@ -432,7 +443,8 @@ public class AgentSpace {
 
     /**
      * Returns a set of all agents
-     * @return 
+     *
+     * @return
      */
     public Set<IbevacAgent> getAllAgents() {
         HashSet<IbevacAgent> allAgents = new HashSet<IbevacAgent>();

@@ -7,7 +7,6 @@ package ibevac.datatypes;
 import javax.vecmath.Point2d;
 
 /**
- *
  * @author vaisagh
  */
 public class SmallRoom {
@@ -41,8 +40,8 @@ public class SmallRoom {
         hash = 97 * hash + this.center.hashCode();
         hash = 97 * hash + this.area.hashCode();
         hash = 97 * hash + this.floor;
-        
-        
+
+
         hashcode = hash;
     }
 
@@ -64,10 +63,7 @@ public class SmallRoom {
         if (!this.center.equals(other.center)) {
             return false;
         }
-        if (!this.area.equals(other.area)) {
-            return false;
-        }
-        return true;
+        return this.area.equals(other.area);
     }
 
     @Override
@@ -82,11 +78,8 @@ public class SmallRoom {
 
     public boolean contains(Point2d location) {
 
-        if (location.x >= mnx && location.x <= mxx
-                && location.y >= mny && location.y <= mxy) {
-            return true;
-        }
-        return false;
+        return location.x >= mnx && location.x <= mxx
+                && location.y >= mny && location.y <= mxy;
     }
 
     public Integer getAreaId() {

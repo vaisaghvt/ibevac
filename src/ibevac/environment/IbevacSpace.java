@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package ibevac.environment;
 
@@ -30,52 +30,53 @@ import abmcs.motionplanning.level0.jbox2d.JBox2DPhysicalObject;
 import ibevac.agent.AgentDescriptionModule.AgentType;
 import ibevac.cue.Cue;
 import ibevac.datatypes.CCrowd;
+
 import java.lang.UnsupportedOperationException;
 import java.util.ArrayList;
 import java.util.List;
+
 import sim.util.Bag;
 
 /**
  * The main envirnment class in which all the data is stored and accessed through
  * It mostly just delegates a lot of functionality to other classes.
- * 
- * 
- * 
- *  @author     <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
- *  @version    $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
+ *
+ * @author <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
+ * @version $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
  */
 public class IbevacSpace {
 
-    private int numberOfFloors;
+    private final int numberOfFloors;
     /**
-     * A reference to the level0motion planning which acts as a physical sanity 
+     * A reference to the level0motion planning which acts as a physical sanity
      * check
      */
-    private Level0MotionPlanning physicalMovementEngine;
+    private final Level0MotionPlanning physicalMovementEngine;
     /**
-     * The actual physical environment in which all the objects are stored and 
+     * The actual physical environment in which all the objects are stored and
      * on which the physical movement engie acts
      */
-    private PhysicalEnvironment physicalEnvironment;
+    private final PhysicalEnvironment physicalEnvironment;
     /**
      * The actual real world map in which all the obstacles and agents are stored
-     * and which keeps a track of rooms, floors links, staircases, etc. 
+     * and which keeps a track of rooms, floors links, staircases, etc.
      */
-    private RealWorldLayout realWorldMap;
-    private CueSpace cueSpace;
-    private FireSpace fireSpace;
+    private final RealWorldLayout realWorldMap;
+    private final CueSpace cueSpace;
+    private final FireSpace fireSpace;
     private final SmokeSpace smokeSpace;
     private final IbevacModel model;
 
     /**
-     * Calls all the respective spaces and passes the parameters to it to 
+     * Calls all the respective spaces and passes the parameters to it to
      * initialize them in appropriate ways
+     *
      * @param environment
      * @param scenario
-     * @param model 
+     * @param model
      */
     public IbevacSpace(PhysicalEnvironment environment,
-            CEvacuationScenario scenario, IbevacModel model) {
+                       CEvacuationScenario scenario, IbevacModel model) {
 
 
         physicalEnvironment = environment;
@@ -106,7 +107,8 @@ public class IbevacSpace {
 
     /**
      * Supposed to initialize agents as said in the scenario file
-     * @param scenario 
+     *
+     * @param scenario
      */
     public Collection<IbevacAgent> initializeAgents(CEvacuationScenario scenario) {
         List<IbevacAgent> allAgents = new ArrayList<IbevacAgent>();
@@ -131,7 +133,8 @@ public class IbevacSpace {
     /**
      * Initializes the agents as one in each room  with agent characteristics
      * as specified in the scenario file.
-     * @param scenario 
+     *
+     * @param scenario
      */
     public Collection<IbevacAgent> initializeAgentsDefault(CEvacuationScenario scenario) {
         List<IbevacAgent> allAgents = new ArrayList<IbevacAgent>();
@@ -170,9 +173,11 @@ public class IbevacSpace {
     }
 
     //TODO : Not accurate for odd number of agents
+
     /**
      * Initializes agents in random locations on the map.
-     * @param scenario 
+     *
+     * @param scenario
      */
     public Collection<IbevacAgent> initializeAgentsRandomly(CEvacuationScenario scenario, int numberOfAgents) {
         List<IbevacAgent> allAgents = new ArrayList<IbevacAgent>();
@@ -201,33 +206,35 @@ public class IbevacSpace {
         List<IbevacAgent> allAgents = new ArrayList<IbevacAgent>();
         // CFloor floor = scenario.getFloors().get(0);
 
-        for (int f = 0; f < scenario.getFloors().size(); ++f) {
+        for (int i = 0; i < numberOfManagers; i++) {
+            int f = IbevacRNG.instance().nextInt(numberOfFloors);
             CFloor floor = scenario.getFloors().get(f);
             int offset = realWorldMap.getOffset(f);
             Set<IbevacAgent> agents = this.getAgentsByFloor(f);
 
-            for (int i = 0; i < numberOfManagers / scenario.getFloors().size(); i++) {
-                // randomly place 2 agents in every room
-                CArea room = floor.getRooms().get(IbevacRNG.instance().nextInt(floor.getRooms().size()));
-                allAgents.add(createAgent(room, offset, f, agents, scenario, AgentType.MANAGEMENT));
-            }
 
+            // randomly place 2 agents in every room
+            CArea room = floor.getRooms().get(IbevacRNG.instance().nextInt(floor.getRooms().size()));
+            allAgents.add(createAgent(room, offset, f, agents, scenario, AgentType.DEFAULT));
+
+//          
         }
         return allAgents;
     }
 
     /**
-     * Creates an individual agent at a particular location. Uses the parameters 
+     * Creates an individual agent at a particular location. Uses the parameters
      * in EvacConstant.
+     *
      * @param area
      * @param offset
      * @param floorNumber
      * @param agents
-     * @param scenario (useful for creating the ibevac agent appropriately with 
-     * the correct amount of knowledge.
+     * @param scenario    (useful for creating the ibevac agent appropriately with
+     *                    the correct amount of knowledge.
      */
     private IbevacAgent createAgent(CArea area, int offset, int floorNumber,
-            Set<IbevacAgent> agents, CEvacuationScenario scenario, AgentType type) {
+                                    Set<IbevacAgent> agents, CEvacuationScenario scenario, AgentType type) {
         // determine the mass of the agent;
         IbevacRNG random = IbevacRNG.instance();
 
@@ -289,7 +296,8 @@ public class IbevacSpace {
 
     /**
      * Adds the agent to the appropriate sub spaces
-     * @param agent 
+     *
+     * @param agent
      */
     public void addAgent(IbevacAgent agent) {
         physicalEnvironment.addAgent(agent);
@@ -298,7 +306,8 @@ public class IbevacSpace {
 
     /**
      * Removes the agent from the appropriate sub spaces
-     * @param agent 
+     *
+     * @param agent
      */
     public void removeAgent(IbevacAgent agent) {
 
@@ -420,7 +429,7 @@ public class IbevacSpace {
     }
 
     public Collection<? extends IbevacAgent> getAgentsInRadius(IbevacAgent me,
-            double radius) {
+                                                               double radius) {
         return realWorldMap.getAgentsInRadius(me, radius);
     }
 
@@ -441,7 +450,7 @@ public class IbevacSpace {
         return this.realWorldMap.getAllObstacleLines();
     }
 
-//    public Collection<? extends Cue> getCuesInVicinity(IbevacAgent me, CArea area) {
+    //    public Collection<? extends Cue> getCuesInVicinity(IbevacAgent me, CArea area) {
 //        Set<Cue> perceivedCues = new HashSet<>();
 //        perceivedCues.addAll(cueSpace.getCuesForAreaId(area.getId()));
 //        if (area instanceof CLink) {
@@ -498,9 +507,10 @@ public class IbevacSpace {
     /**
      * Returns the physical location of a given logical location. The discrepancy
      * is because the JBox2D environment cannot store 3D environments.
+     *
      * @param p
      * @param offset
-     * @return 
+     * @return
      */
     public static Point2d translateToPhysicalLocation(Point2d p, int offset) {
         return JBox2DPhysicalObject.TranslateToPhysicalLocation(p, offset);
@@ -509,23 +519,24 @@ public class IbevacSpace {
     /**
      * Returns the logical location of a given physical location. The discrepancy
      * is because the JBox2D environment cannot store 3D environments.
-     * @param p
+     *
+     * @param pos
      * @param offset
-     * @return 
+     * @return
      */
     public static Point2d translateToLogicalLocation(Point2d pos, int offset) {
         return JBox2DPhysicalObject.TranslateToLogicalLocation(pos, offset);
     }
 
     public void scheduleFireSpace(IbevacModel ibevacModel, int ordering,
-            double interval) {
+                                  double interval) {
         System.out.println("Fire Scheduled");
         fireSpace.schedule(ibevacModel, ordering, interval); // every 1 seconds
 
     }
 
     public void scheduleSmokeSpace(IbevacModel ibevacModel, int ordering,
-            double interval) {
+                                   double interval) {
         System.out.println("Smoke Scheduled");
         smokeSpace.schedule(ibevacModel, ordering, interval); // every 1 seconds
 

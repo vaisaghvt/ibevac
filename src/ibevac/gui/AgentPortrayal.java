@@ -12,6 +12,7 @@ import java.awt.geom.Ellipse2D;
 
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
+
 import sim.display.GUIState;
 import sim.portrayal.DrawInfo2D;
 import sim.portrayal.Inspector;
@@ -21,33 +22,33 @@ import sim.portrayal.SimplePortrayal2D;
 /**
  * This class is responsible for drawing (portraying) the agent and the agent
  * related componenets for each agent.
- * 
- * 
- * 
- *  @author     <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
- *  @version    $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
+ *
+ * @author <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
+ * @version $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
  */
 public class AgentPortrayal extends SimplePortrayal2D {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 2911263821021608067L;
     /**
-     * Strictly speaking this is not the velocity. Rather it draws a straight 
-     * line from the current agent location to the agent's current aim. or 
+     * Strictly speaking this is not the velocity. Rather it draws a straight
+     * line from the current agent location to the agent's current aim. or
      * waypoint.
+     *
      * @see WaypointTracker
      */
-    boolean showVelocity = false;
-    Color agentColor;
+    private final boolean showVelocity = false;
+    private Color agentColor;
 
     /**
      * Draws a circular agent and depending on the boolean flag draws the "velocity"
      * too.
+     *
      * @param object
      * @param gg
-     * @param info 
+     * @param info
      */
     @Override
     public void draw(Object object, Graphics2D gg, DrawInfo2D info) {
@@ -57,7 +58,7 @@ public class AgentPortrayal extends SimplePortrayal2D {
         if (agent.getType() == AgentType.MANAGEMENT) {
             agentColor = Color.BLACK;
 
-        }else {
+        } else {
             agentColor = Color.BLUE;
         }
         if (agent.isDead()) {
@@ -84,8 +85,7 @@ public class AgentPortrayal extends SimplePortrayal2D {
 
         int r = (int) ((agent.getEffectiveDiameter() / IbevacModel.scale) / 2.0);
         gg.fillOval(x1 - r, y1 - r, 2 * r, 2 * r);
-        
-        
+
 
         if (showVelocity && agent.getLevel1MotionPlanning().getCurrentSpatialWaypoint() != null) {
             gg.setColor(Color.black);
@@ -98,18 +98,17 @@ public class AgentPortrayal extends SimplePortrayal2D {
         }
 
 
-
     }
 
     /**
-     * This function checks whether an object should be returned when an object 
+     * This function checks whether an object should be returned when an object
      * search is done or when drawing. It is also used to determine whether the
-     * inspector should be called. The elipse is made to be slightly larger 
+     * inspector should be called. The elipse is made to be slightly larger
      * to ensure that the object is drawn /detected.
-     * 
+     *
      * @param object
      * @param range
-     * @return 
+     * @return
      */
     @Override
     public boolean hitObject(Object object, DrawInfo2D range) {
@@ -133,11 +132,12 @@ public class AgentPortrayal extends SimplePortrayal2D {
     }
 
     /**
-     * Delegates to the agent inspector the task of creating an appropriate 
+     * Delegates to the agent inspector the task of creating an appropriate
      * inspector to learn more about the agent.
+     *
      * @param wrapper
      * @param state
-     * @return 
+     * @return
      */
     @Override
     public Inspector getInspector(LocationWrapper wrapper, GUIState state) {

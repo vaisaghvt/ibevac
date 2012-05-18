@@ -15,45 +15,46 @@ import ibevac.cue.FireCue;
 import ibevac.datatypes.CArea;
 import ibevac.datatypes.CFloor;
 import ibevac.engine.IbevacModel;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import javax.vecmath.Point2d;
+
 import sim.field.continuous.Continuous2D;
 import sim.util.Bag;
 import sim.util.Double2D;
 
 /**
  * This class is responsible for handling and storing cues.
- * 
- * 
- * 
- *  @author     <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
- *  @version    $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
+ *
+ * @author <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
+ * @version $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
  */
 class CueSpace {
 
     /**
      * Stores all the cues for a particular room
      */
-    Multimap<SmallRoom, Cue> cuesForSmallRoom;
+    final Multimap<SmallRoom, Cue> cuesForSmallRoom;
     /**
      * Stores all the small rooms in a particulr room/area
      */
-    Multimap<Integer, SmallRoom> smallRoomsForArea;
+    final Multimap<Integer, SmallRoom> smallRoomsForArea;
     /**
      * Stores the fields in which all the cuse are stored.
      */
-    private ArrayList<Continuous2D> cueSpaces;
+    private final ArrayList<Continuous2D> cueSpaces;
 
     /**
-     * Initializes all the small rooms so that they are ready to store cues in 
+     * Initializes all the small rooms so that they are ready to store cues in
      * them.
+     *
      * @param allRooms
      * @param maxSmallRoomLength
      * @param listOfFloors
-     * @param space 
+     * @param space
      */
     CueSpace(Collection<CArea> allRooms, double maxSmallRoomLength, Collection<CFloor> listOfFloors, IbevacSpace space) {
         cuesForSmallRoom = HashMultimap.create();
@@ -99,8 +100,8 @@ class CueSpace {
 //                System.out.println(area.getId() + ":" + idealNumberOfRoomsOnLength + "," + idealNumberOfRoomsOnWidth);
                 for (int i = 0; i < idealNumberOfRoomsOnWidth; i++) {
                     for (int j = 0; j < idealNumberOfRoomsOnLength; j++) {
-                        double locationX = mnx + i * idealWidth + ((double) idealWidth / 2.0);
-                        double locationY = mny + j * idealLength + ((double) idealLength / 2.0);
+                        double locationX = mnx + i * idealWidth + (idealWidth / 2.0);
+                        double locationY = mny + j * idealLength + (idealLength / 2.0);
                         SmallRoom tempRoom = new SmallRoom(idealLength, idealWidth,
                                 new Point2d(locationX, locationY),
                                 area, space.getFloorByAreaId(area.getId()));
@@ -124,18 +125,19 @@ class CueSpace {
     }
 
     /**
-     * Uses the small room field to get all the small rooms in a radius of a 
+     * Uses the small room field to get all the small rooms in a radius of a
      * particualr position. And then returns all the cuse in these small rooms.
+     *
      * @param me
      * @param radius
-     * @return 
+     * @return
      */
     public Bag getCuesInRadius(IbevacAgent me, double radius) {
 
         Bag smallRooms = cueSpaces.get(me.getCurrentFloorId()).getObjectsExactlyWithinDistance(
                 new Double2D(
-                me.getLogicalPosition().getX() / IbevacModel.scale,
-                me.getLogicalPosition().getY() / IbevacModel.scale),
+                        me.getLogicalPosition().getX() / IbevacModel.scale,
+                        me.getLogicalPosition().getY() / IbevacModel.scale),
                 radius);
         Bag cuesToReturn = new Bag();
         for (Object object : smallRooms) {
@@ -148,18 +150,17 @@ class CueSpace {
     }
 
     /**
-     * Uses the small room field to get all the small rooms in a radius of a 
+     * Uses the small room field to get all the small rooms in a radius of a
      * particualr position. And then returns all the cuse in these small rooms.
-     * @param me
-     * @param radius
-     * @return 
+     *
+     * @return
      */
     public int getArea(int x, int y, int floorId, double radius) {
 
         Bag smallRooms = cueSpaces.get(floorId).getObjectsExactlyWithinDistance(
                 new Double2D(
-                x / IbevacModel.scale,
-                y / IbevacModel.scale),
+                        x / IbevacModel.scale,
+                        y / IbevacModel.scale),
                 radius);
         assert smallRooms.size() != 0;
 
@@ -172,8 +173,9 @@ class CueSpace {
 
     /**
      * Puts the passed cue into all the small rooms in this area
+     *
      * @param cue
-     * @param area 
+     * @param area
      */
     public void putCueInArea(Cue cue, CArea area) {
 
@@ -190,10 +192,11 @@ class CueSpace {
 
     /**
      * Determines the small room location for a passed x,y
+     *
      * @param x
      * @param y
      * @param areaId
-     * @return 
+     * @return
      */
     SmallRoom determineSmallRoomOfLocation(int x, int y, int areaId) {
 
@@ -217,8 +220,9 @@ class CueSpace {
 
     /**
      * Removes the said cue from all small rooms in this area.
+     *
      * @param cue
-     * @param areaId 
+     * @param areaId
      */
     void removeCueFromRoom(FireAlarmCue cue, int areaId) {
         for (SmallRoom room : this.smallRoomsForArea.get(areaId)) {

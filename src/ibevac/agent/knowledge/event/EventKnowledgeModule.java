@@ -5,33 +5,36 @@ import ibevac.agent.knowledge.event.PhaseBucket.Phase;
 import ibevac.agent.planner.Planner;
 import ibevac.cue.Cue;
 import ibevac.cue.Cue.Ambiguity;
+
 import java.util.EnumMap;
 import java.util.HashMap;
 
 /**
- * This class is responsible for handling cues and their perception. 
- * 
- *  @author     <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
- *  @version    $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
+ * This class is responsible for handling cues and their perception.
+ *
+ * @author <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
+ * @version $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
  */
 public class EventKnowledgeModule {
 
-    private EnumMap<Phase, PhaseBucket> phaseValues;
+    private final EnumMap<Phase, PhaseBucket> phaseValues;
     private Planner planner;
 
     /**
      * Initializes the phase buckets.
-     * @param agentType 
-     * @see #createPhaseBuckets(ibevac.agent.AgentDescriptionModule.AgentType) 
+     *
+     * @param agentType
+     * @see #createPhaseBuckets(ibevac.agent.AgentDescriptionModule.AgentType)
      */
     public EventKnowledgeModule(AgentType agentType) {
         phaseValues = createPhaseBuckets(agentType);
     }
 
     /**
-     * Initializes the planner. Seperate from teh constructor becase of the 
+     * Initializes the planner. Seperate from teh constructor becase of the
      * complicated set of interdependencies.
-     * @param planner 
+     *
+     * @param planner
      */
     public void setPlanner(Planner planner) {
         this.planner = planner;
@@ -40,16 +43,17 @@ public class EventKnowledgeModule {
     /**
      * Find the effects of the passed cue. A seperate function is created so that
      * this can be extended later for showing memory effects
-     * @param cue 
-     * @see #processEffects(ibevac.cue.Cue) 
+     *
+     * @param cue
+     * @see #processEffects(ibevac.cue.Cue)
      */
     public void perceiveCue(Cue cue) {
         processEffects(cue);
     }
 
     /**
-     *  Determine the effects of this particular cue on all the phase buckets.
-     * 
+     * Determine the effects of this particular cue on all the phase buckets.
+     *
      * @param cue
      * @see Phase
      */
@@ -94,11 +98,11 @@ public class EventKnowledgeModule {
 
     /**
      * This function acts as an abstract factory that creates the phase buckets
-     * as per the agent type specified. This enables us to model the fact that 
+     * as per the agent type specified. This enables us to model the fact that
      * the phase transitions for diffrent types of people might be different.
+     *
      * @param agentType
-     * @return 
-     * 
+     * @return
      * @see AgentType
      */
     private EnumMap<Phase, PhaseBucket> createPhaseBuckets(AgentType agentType) {
@@ -126,13 +130,10 @@ public class EventKnowledgeModule {
     public void updateState() {
         if (phaseValues.get(Phase.FIRE).upperThresholdBreached()) {
             planner.informAbout(Phase.FIRE);
-            return;
         } else if (phaseValues.get(Phase.UNUSUAL).upperThresholdBreached()) {
             planner.informAbout(Phase.UNUSUAL);
-            return;
         } else if (phaseValues.get(Phase.UNUSUAL).lowerThresholdBreached()) {
             planner.informAbout(Phase.NONE);
-            return;
         }
     }
 }

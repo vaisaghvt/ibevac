@@ -20,17 +20,19 @@ import org.jgrapht.alg.KShortestPaths;
 import abmcs.motionplanning.level3.Level3MotionPlanning;
 import abmcs.motionplanning.level3.LogicalWaypoint;
 import ibevac.agent.knowledge.environment.CompleteKnowledge;
+
 import java.util.Collection;
 
 /**
- * <h4>The level 3 motion planning algorithm that determines the set of logical 
- * waypoints. This works using the Complete Knowledge Environment knowledge 
+ * <h4>The level 3 motion planning algorithm that determines the set of logical
+ * waypoints. This works using the Complete Knowledge Environment knowledge
  * module. </h4>
- *
- *  <h4> Does not consider distance between logical waypoints. Path is 
+ * <p/>
+ * <h4> Does not consider distance between logical waypoints. Path is
  * determined based on number of logical waypoints alone.
- *  @author     <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
- *  @version    $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
+ *
+ * @author <A HREF="mailto:vaisagh1@e.ntu.edu.sg">Vaisagh</A>
+ * @version $Revision: 1.0.0.0 $ $Date: 16/Apr/2012 $
  */
 public class EvacL3MP implements Level3MotionPlanning {
 
@@ -44,19 +46,17 @@ public class EvacL3MP implements Level3MotionPlanning {
     }
 
     /**
-     * Get the ordered list of logical waypoints for the agent to pass through 
+     * Get the ordered list of logical waypoints for the agent to pass through
      * to get to his current goal.
-     *
-     * If he is already at his goal area or on one of the links leading to his 
-     * goal area then the current areas logical waypoints is 
+     * <p/>
+     * If he is already at his goal area or on one of the links leading to his
+     * goal area then the current areas logical waypoints is
      * returned from which the spatial waypoints can eventually be obtained.
-     * 
+     * <p/>
      * Else the determineEscapePath() is called to determine best path to exit
-     * 
-     * 
-     * @return List of logical waypoints 
-     * 
-     * @see EvacL3MP#determineEscapePath(java.util.Collection) 
+     *
+     * @return List of logical waypoints
+     * @see EvacL3MP#determineEscapePath(java.util.Collection)
      */
     @Override
     public List<LogicalWaypoint> getLogicalWaypoints() {
@@ -88,15 +88,15 @@ public class EvacL3MP implements Level3MotionPlanning {
             if (agent.getCurrentGoalAreaIds().contains(
                     roomId0)) {
 
-                singleton.add(new IbevacLogicalWaypoint(null, 
-                        agent.getEnvironmentKnowledge().resolveAreaById(roomId0), 
+                singleton.add(new IbevacLogicalWaypoint(null,
+                        agent.getEnvironmentKnowledge().resolveAreaById(roomId0),
                         null, space, agent).
                         setInitialWayPoint(new SpatialWaypoint(agent.getPosition())));
                 return singleton;
             } else if (agent.getCurrentGoalAreaIds().contains(
                     roomId1)) {
-                singleton.add(new IbevacLogicalWaypoint(null, 
-                        agent.getEnvironmentKnowledge().resolveAreaById(roomId1), 
+                singleton.add(new IbevacLogicalWaypoint(null,
+                        agent.getEnvironmentKnowledge().resolveAreaById(roomId1),
                         null, space, agent).
                         setInitialWayPoint(new SpatialWaypoint(agent.getPosition())));
                 return singleton;
@@ -108,23 +108,23 @@ public class EvacL3MP implements Level3MotionPlanning {
         EscapePath escapePath = determineEscapePath(agent.getCurrentGoalAreaIds());
         assert (escapePath != null);
 
-        List<LogicalWaypoint> waypoints = escapePath.getLogicalWaypoints();
-        return waypoints;
+
+        return escapePath.getLogicalWaypoints();
     }
 
     /**
      * Determines an EscapePath for the agent to the exit.
-     * 
+     * <p/>
      * This function determines the paths to all the possible goals of the agent a
-     * and chooses the shortest path to the closest goal in the list. This shortest 
+     * and chooses the shortest path to the closest goal in the list. This shortest
      * path is found using KShortestPaths class
+     *
      * @param goalAreaIds
-     * @return 
-     * 
+     * @return
      * @see EscapePath
-     * @see EscapePathImpl#getLogicalWaypoints() 
-     * @see KShortestPaths#KShortestPaths(org.jgrapht.Graph, java.lang.Object, int) 
-     * @see KShortestPaths#getPaths(java.lang.Object) 
+     * @see EscapePathImpl#getLogicalWaypoints()
+     * @see KShortestPaths#KShortestPaths(org.jgrapht.Graph, java.lang.Object, int)
+     * @see KShortestPaths#getPaths(java.lang.Object)
      */
     private EscapePath determineEscapePath(Collection<Integer> goalAreaIds) {
         //get the knowledge object and the current area id, we'll need it further down		
@@ -212,9 +212,9 @@ public class EvacL3MP implements Level3MotionPlanning {
     }
 
     /**
-     * Private extension of EscapePath which provides modularity for determining 
+     * Private extension of EscapePath which provides modularity for determining
      * the logical waypoints from a GraphPath
-     * 
+     *
      * @see GraphPath
      */
     private class EscapePathImpl implements EscapePath {
@@ -233,12 +233,9 @@ public class EvacL3MP implements Level3MotionPlanning {
         private final int goalAreaId;
 
         /**
-         * 
-         * 
-         * @param path          GraphPath determined by Shortest Path algorithm
-         * @param areaId        The starting area ID of the path
-         * @param goalAreaId    The ending area ID of the path
-         * 
+         * @param path       GraphPath determined by Shortest Path algorithm
+         * @param areaId     The starting area ID of the path
+         * @param goalAreaId The ending area ID of the path
          * @see GraphPath
          */
         public EscapePathImpl(GraphPath<Integer, CEdge> path, int areaId, int goalAreaId) {
@@ -248,11 +245,12 @@ public class EvacL3MP implements Level3MotionPlanning {
         }
 
         /**
-         * Get's the ordered list of logical waypoints for the agent to traverse 
+         * Get's the ordered list of logical waypoints for the agent to traverse
          * through to getf from areaId to goalAreaId. This list is extracted and
          * processed from the edge list in the path
+         *
          * @return Ordered list of logical waypoints
-         * @see GraphPath#getEdgeList() 
+         * @see GraphPath#getEdgeList()
          */
         @Override
         public List<LogicalWaypoint> getLogicalWaypoints() {
