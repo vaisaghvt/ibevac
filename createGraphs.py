@@ -63,14 +63,14 @@ def survivedPlot(conn, ax):
  plotWithData(ax,sql, conn)
  
  
- ax.set_title("Survival Rate for each setting")
+ ax.set_title("Survival Rate")
  ax.set_xlabel('Ambiguity');
- ax.set_ylabel('Survival percentage');
+ ax.set_ylabel('Survival Percentage');
  ax.set_ybound(lower=0, upper=100)
  ax.set_xbound(lower=0.0, upper= 1.0)
  # ax.set_grid(True);
  leg = ax.legend(('Experiment 1', 'Experiment 2'),
-           'upper center', shadow=True)
+           'lower right', shadow=False)
  # set some legend properties.  All the code below is optional.  The
  # defaults are usually sensible but if you need more control, this
  # shows you how
@@ -88,75 +88,7 @@ def survivedPlot(conn, ax):
   l.set_linewidth(1.5)  # the legend line width
 
    
-def lastStartPlot(conn):
-    # Execute the query AND get the result set into a rowset
- sql = "SELECT description,avg(maxStart), std(maxStart) FROM ibevac_database.run_info WHERE experiment_id=1 GROUP BY description order by abs(description)"
- plotWithData(sql, conn)
 
- sql = "SELECT description,avg(maxStart), std(maxStart) FROM ibevac_database.run_info WHERE experiment_id=2 GROUP BY description order by abs(description)"
- plotWithData(sql, conn)
- 
- leg = plt.legend(('Fire alarm ambiguity experiment', 'Message ambiguity experiment'),
-           'upper left', shadow=True)
- # set some legend properties.  All the code below is optional.  The
- # defaults are usually sensible but if you need more control, this
- # shows you how
- 
- # the matplotlib.patches.Rectangle instance surrounding the legend
- frame  = leg.get_frame()
- frame.set_facecolor('0.80')    # set the frame face color to light gray
- 
- # matplotlib.text.Text instances
- for t in leg.get_texts():
-     t.set_fontsize('small')    # the legend text fontsize
- 
- # matplotlib.lines.Line2D instances
- for l in leg.get_lines():
-  l.set_linewidth(1.5)  # the legend line width
- plt.title("Latest reaction graph")
- plt.xlabel('Ambiguity');
- plt.ylabel('Reaction time');
- plt.axis([0.0,1.0,0, 6000]);
- plt.grid(True);
- plt.show()
-
-
-def completionPlot(conn):
- plt.figure()
-    # Execute the query AND get the result set into a rowset
- sql = '''SELECT description,avg(completionTime), std(completionTime) 
- 		FROM ibevac_database.run_info 
- 		WHERE experiment_id=1 
- 		GROUP BY description order by abs(description)'''
- plotWithData(sql, conn, 111)
-
- sql = "SELECT description,avg(completionTime), std(completionTime) FROM ibevac_database.run_info WHERE experiment_id=2 GROUP BY description order by abs(description)"
- plotWithData(sql, conn, 111)
- 
- leg = plt.legend(('Fire alarm ambiguity experiment', 'Message ambiguity experiment'),
-           'upper left', shadow=True)
- # set some legend properties.  All the code below is optional.  The
- # defaults are usually sensible but if you need more control, this
- # shows you how
- 
- # the matplotlib.patches.Rectangle instance surrounding the legend
- frame  = leg.get_frame()
- frame.set_facecolor('0.80')    # set the frame face color to light gray
- 
- # matplotlib.text.Text instances
- for t in leg.get_texts():
-     t.set_fontsize('small')    # the legend text fontsize
- 
- # matplotlib.lines.Line2D instances
- for l in leg.get_lines():
-  l.set_linewidth(1.5)  # the legend line width
- plt.title("Completion time graph")
- plt.xlabel('Ambiguity');
- plt.ylabel('Completion time');
- plt.axis([0.0,1.0,5700, 6000]);
- plt.grid(True);
- plt.show()
-   
 def betterStartPlot(conn, ax):
  # plt.figure()
  sql = "SELECT description,avg(maxStart), std(maxStart) FROM ibevac_database.run_info WHERE experiment_id=1 GROUP BY description order by abs(description)"
@@ -184,7 +116,7 @@ def betterStartPlot(conn, ax):
  
  # plt.set_yticklabels([])
  # plt.set_xticklabels([])
- ax.set_title("Last start time graph")
+ ax.set_title("Latest Evacuation Start Time")
  ax.set_xlabel('Ambiguity');
  ax.set_ylabel('Time Step ');
  ax.set_ybound(lower=0, upper=6000)
@@ -194,7 +126,7 @@ def betterStartPlot(conn, ax):
  # ax.set_grid(True);
  
  leg = ax.legend(('Experiment 1', 'Experiment 2'),
-           'center left', shadow=True)
+           'lower right', shadow=False)
  # set some legend properties.  All the code below is optional.  The
  # defaults are usually sensible but if you need more control, this
  # shows you how

@@ -173,13 +173,13 @@ public class IbevacGui extends GUIState {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-            int dimension = Math.max((int) (model.getWidth(floorNumber) / IbevacModel.scale), (int) (model.getHeight(floorNumber) / IbevacModel.scale));
+//            int dimension = Math.max((int) (model.getWidth(floorNumber) / IbevacModel.scale), (int) (model.getHeight(floorNumber) / IbevacModel.scale));
 
             Continuous2D randomField = new Continuous2D(
-                    dimension,
                     1,
-                    1);
-            randomField.setObjectLocation("", new Double2D(0.5, 0.5));
+                    1,
+                    1.02);
+            randomField.setObjectLocation("", new Double2D(0.495, 0.5));
 
             backgroundPortrayals.get(floorNumber).setField(randomField);
             int type = originalImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
@@ -224,7 +224,7 @@ public class IbevacGui extends GUIState {
             displayFrames.get(floorNumber).setTitle("Floor #" + floorNumber);
             displayFrames.get(floorNumber).setVisible(true);
             displayFrames.get(floorNumber).setResizable(true);
-//            displays.get(floorNumber).attach(backgroundPortrayals.get(floorNumber), "Overlay");
+            displays.get(floorNumber).attach(backgroundPortrayals.get(floorNumber), "Overlay");
             displays.get(floorNumber).attach(firePortrayals.get(floorNumber),
                     "Fire");
             displays.get(floorNumber).attach(smokePortrayals.get(floorNumber),
