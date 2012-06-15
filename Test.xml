@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<CEvacuationScenario scale="9.3" path="C:\Users\vaisagh\Documents\NetBeansProjects\IBEVAC" name="test" xmlns="http://datatypes.evac">
+    <floors width="688" height="595">
+        <id>0</id>
+        <image>C:\Users\vaisagh\Documents\NetBeansProjects\IBEVAC\generic_floor_2.gif</image>
+        <rooms>
+            <id>1</id>
+            <corner0 y="489" x="121"/>
+            <corner1 y="511" x="568"/>
+        </rooms>
+        <staircases>
+            <id>3</id>
+            <corner0 y="191" x="426"/>
+            <corner1 y="221" x="502"/>
+        </staircases>
+    </floors>
+    <floors width="688" height="595">
+        <id>4</id>
+        <image>C:\Users\vaisagh\Documents\NetBeansProjects\IBEVAC\generic_floor_2.gif</image>
+        <staircases>
+            <id>6</id>
+            <corner0 y="190" x="427"/>
+            <corner1 y="222" x="500"/>
+        </staircases>
+    </floors>
+    <staircaseGroups name="1">
+        <id>7</id>
+        <staircaseIds>6</staircaseIds>
+        <staircaseIds>3</staircaseIds>
+    </staircaseGroups>
+</CEvacuationScenario>
+
