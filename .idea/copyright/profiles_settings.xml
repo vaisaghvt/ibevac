@@ -1,5 +1,12 @@
+<<<<<<< HEAD
 <component name="CopyrightManager">
   <settings default="">
     <module2copyright />
   </settings>
+=======
+<component name="CopyrightManager">
+  <settings default="">
+    <module2copyright />
+  </settings>
+>>>>>>> 8d84a2e7241b82ad9eace63bfa4e46cf68742dbe
 </component>
